@@ -1,0 +1,48 @@
+/***********************************************************/
+/* Navbar */
+/***********************************************************/
+.navbar {
+  font-size: 14px;
+}
+
+.nav-logo {
+  width: 60px;
+  margin-right: 5px;
+}
+
+.main-title {
+  text-align: center;
+  border: 1px solid red;
+}
+
+/***********************************************************/
+/* CheckInOut */
+/***********************************************************/
+.main-schedule {
+  border: 2px solid green;
+  height: 100vh;
+}
+
+.task-header {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 160%;
+  background-color: rgb(224, 221, 221);
+}
+
+.draggable {
+  width: 200px;
+  height: 80px;
+  margin: 5px auto;
+  line-height: 5em;
+  border: 1px solid rgb(22, 22, 22);
+  color: rgb(12, 12, 12);
+}
+
+.sched-col {
+  text-align: center;
+  /*height: 100vh;*/
+  height: 200px;
+  border: 1px solid #000;
+}
