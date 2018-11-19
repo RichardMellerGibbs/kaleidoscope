@@ -7,9 +7,7 @@ const Container = styled.div`
   border-radius: 2px;
   padding: 8px;
   margin-bottom: 8px;
-  background-color: ${props => (
-    props.isDragging ? 'lightgreen' : 'white'
-  )};
+  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;
 
 export default class task extends Component {
@@ -23,6 +21,7 @@ export default class task extends Component {
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
+            {this.props.task.title} {this.props.task.forename}{' '}
             {this.props.task.surname}
           </Container>
         )}

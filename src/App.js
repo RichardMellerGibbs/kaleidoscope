@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Navbar from './components/layout/navbar';
 //import initialData from './components/entryExit/data';
-import testData from './components/entryExit/testData';
+//import testData from './components/entryExit/testData';
 import Column from './components/entryExit/column';
 
 const Container = styled.div`
@@ -46,11 +46,10 @@ class App extends Component {
         /************************************************/
         /* Extra employees here
         /************************************************/
-        testData.forEach(testEmployee => {
-          checkedInData.push(testEmployee);
-        });
+        // testData.forEach(testEmployee => {
+        //   checkedInData.push(testEmployee);
+        // });
 
-        //testData
         /************************************************/
         /* Extra employees here
         /************************************************/
@@ -77,7 +76,9 @@ class App extends Component {
             initialWorkers.forEach((worker, index) => {
               tasks[worker.reference] = {
                 id: worker.reference,
-                surname: worker.WorkerName.WorkerSurname
+                surname: worker.WorkerName.WorkerSurname,
+                title: worker.WorkerName.workerTitle,
+                forename: worker.WorkerName.WorkerForename
               };
             });
 
@@ -117,7 +118,7 @@ class App extends Component {
             // console.log('initialTasks ', tasks);
             // console.log('checkInTasks ', checkInTasks);
             // console.log('checkOutTasks ', checkOutTasks);
-            console.log('initialTaskState ', initialTaskState);
+            //console.log('initialTaskState ', initialTaskState);
 
             //this.setState({ workers: initialWorkers });
             this.setState(initialTaskState);
@@ -193,7 +194,9 @@ class App extends Component {
 
     this.setState(newState);
 
-    const updatesAllowed = false;
+    const updatesAllowed = true;
+
+    const timeNow = Date.now();
 
     if (updatesAllowed) {
       //TODO: Call post endpoint here as the task has moved to a different column.
@@ -204,7 +207,7 @@ class App extends Component {
         //Check in API
         let workerCheckIn = {
           WorkerRef: draggableId,
-          CheckedInDateTime: 1541323635208
+          CheckedInDateTime: timeNow
         };
 
         axios
@@ -222,7 +225,7 @@ class App extends Component {
         //Check out API
         let workerCheckout = {
           WorkerRef: draggableId,
-          CheckedOutDateTime: 1541323635208
+          CheckedOutDateTime: timeNow
         };
 
         axios
