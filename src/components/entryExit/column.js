@@ -15,7 +15,7 @@ const Container = styled.div`
 const Title = styled.h3`
   padding: 8px;
   background-color: ${props =>
-    props.checkedInTitle ? 'rgb(142, 209, 226)' : 'rgb(36, 68, 65)'};
+    props.checkedInTitle ? 'rgb(135, 180, 197)' : 'rgb(59, 88, 99)'};
   color: #fff;
   font-weight: 400;
 `;

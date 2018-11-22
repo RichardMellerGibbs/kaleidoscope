@@ -10,7 +10,8 @@ const Container = styled.div`
   text-align: center;
   color: #fff;
   font-size: 150%;
-  background-color: black;
+  background-color: #2d2d2d;
+  border-radius: 5px;
 
   display: flex;
   flex-direction: column;
