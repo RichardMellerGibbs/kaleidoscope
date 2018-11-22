@@ -112,7 +112,7 @@ class App extends Component {
                   taskIds: checkOutTasks
                 }
               },
-              columnOrder: ['checkedIn', 'checkedOut']
+              columnOrder: ['checkedOut', 'checkedIn']
             };
 
             // console.log('initialWorkers ', initialWorkers);
@@ -253,6 +253,9 @@ class App extends Component {
       if (columnId === 'checkedIn') checkedInCount = tasks.length;
       if (columnId === 'checkedOut') checkedOutCount = tasks.length;
 
+      if (checkedOutCount === 0)
+        checkedOutCount = 'All staff have left the building';
+
       return <Column key={column.id} column={column} tasks={tasks} />;
     });
 
@@ -264,9 +267,9 @@ class App extends Component {
           <div className="row">
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Container>
-                <Counter countValue={checkedInCount} />
-                {content}
                 <Counter countValue={checkedOutCount} />
+                {content}
+                <Counter countValue={checkedInCount} />
               </Container>
             </DragDropContext>
           </div>
