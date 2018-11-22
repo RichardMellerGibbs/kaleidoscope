@@ -8,6 +8,7 @@ const Container = styled.div`
   padding: 8px;
   margin-bottom: 8px;
   background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
+  border-radius: 5px;
 `;
 
 export default class task extends Component {

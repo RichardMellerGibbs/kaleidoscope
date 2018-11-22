@@ -7,6 +7,7 @@ import Navbar from './components/layout/navbar';
 //import initialData from './components/entryExit/data';
 //import testData from './components/entryExit/testData';
 import Column from './components/entryExit/column';
+import Counter from './components/entryExit/counter';
 
 const Container = styled.div`
   display: flex;
@@ -243,9 +244,14 @@ class App extends Component {
   };
 
   render() {
+    let checkedInCount = 0;
+    let checkedOutCount = 0;
     const content = this.state.columnOrder.map(columnId => {
       const column = this.state.columns[columnId];
       const tasks = column.taskIds.map(taskId => this.state.tasks[taskId]);
+
+      if (columnId === 'checkedIn') checkedInCount = tasks.length;
+      if (columnId === 'checkedOut') checkedOutCount = tasks.length;
 
       return <Column key={column.id} column={column} tasks={tasks} />;
     });
@@ -257,7 +263,11 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <DragDropContext onDragEnd={this.onDragEnd}>
-              <Container>{content}</Container>
+              <Container>
+                <Counter countValue={checkedInCount} />
+                {content}
+                <Counter countValue={checkedOutCount} />
+              </Container>
             </DragDropContext>
           </div>
         </div>

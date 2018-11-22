@@ -11,7 +11,7 @@ class Navbar extends Component {
               src={require('../../img/m.png')}
               alt="company logo"
             />
-            Marvin Informatics Kelidescope: Waites Mechanical Services
+            Marvin Informatics - Renai
           </a>
           <button
             className="navbar-toggler"

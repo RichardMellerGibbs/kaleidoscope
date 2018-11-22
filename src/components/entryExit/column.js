@@ -14,6 +14,10 @@ const Container = styled.div`
 `;
 const Title = styled.h3`
   padding: 8px;
+  background-color: ${props =>
+    props.checkedInTitle ? 'rgb(142, 209, 226)' : 'rgb(36, 68, 65)'};
+  color: #fff;
+  font-weight: 400;
 `;
 const TaskList = styled.div`
   padding: 8px;
@@ -28,7 +32,9 @@ export default class column extends Component {
   render() {
     return (
       <Container>
-        <Title>{this.props.column.title}</Title>
+        <Title checkedInTitle={this.props.column.title === 'Checked In'}>
+          {this.props.column.title}
+        </Title>
         <Droppable droppableId={this.props.column.id}>
           {(provided, snapshot) => (
             <TaskList
