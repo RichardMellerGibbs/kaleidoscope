@@ -9,6 +9,8 @@ const Container = styled.div`
   margin-bottom: 8px;
   background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
   border-radius: 5px;
+  height: 80px;
+  font-size: 130%;
 `;
 
 export default class task extends Component {
@@ -22,8 +24,7 @@ export default class task extends Component {
             ref={provided.innerRef}
             isDragging={snapshot.isDragging}
           >
-            {this.props.task.title} {this.props.task.forename}{' '}
-            {this.props.task.surname}
+            {this.props.task.forename} {this.props.task.surname}
           </Container>
         )}
       </Draggable>

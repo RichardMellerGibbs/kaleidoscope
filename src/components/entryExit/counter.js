@@ -17,6 +17,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+//Vertical center
 const Count = styled.div`
   position: relative;
   top: 50%;

@@ -8,15 +8,11 @@ import Navbar from './components/layout/navbar';
 //import testData from './components/entryExit/testData';
 import Column from './components/entryExit/column';
 import Counter from './components/entryExit/counter';
+import sortTasks from './common/sortTasks';
 
 const Container = styled.div`
   display: flex;
   margin: 0 auto;
-`;
-
-const MainTitle = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
 `;
 
 class App extends Component {
@@ -70,7 +66,11 @@ class App extends Component {
             });
 
             const initialWorkers = checkedInData.concat(checkedOutWorkers);
-            //console.log('initialWorkers ', initialWorkers);
+            // console.log(
+            //   `checkedInData ${checkedInData.length} checkedOutWorkers ${
+            //     checkedOutWorkers.length
+            //   }`
+            // );
 
             let tasks = {};
 
@@ -83,20 +83,24 @@ class App extends Component {
               };
             });
 
-            let checkInTasks = [];
+            let checkInUnsortedTasks = [];
             initialWorkers.forEach(worker => {
               if (worker.category === 'checkedIn') {
-                checkInTasks.push(worker.reference);
+                checkInUnsortedTasks.push(worker.reference);
               }
             });
 
+            const checkInTasks = sortTasks(checkInUnsortedTasks, tasks);
+
             //console.log('checkInTasks ', checkInTasks);
 
-            let checkOutTasks = [];
+            let checkOutUnsortedTasks = [];
             initialWorkers.forEach(worker => {
               if (worker.category === 'checkedOut')
-                checkOutTasks.push(worker.reference);
+                checkOutUnsortedTasks.push(worker.reference);
             });
+
+            const checkOutTasks = sortTasks(checkOutUnsortedTasks, tasks);
 
             const initialTaskState = {
               tasks,
@@ -169,19 +173,24 @@ class App extends Component {
     }
 
     //Moving from one column to another
-    const startTaskIds = Array.from(start.taskIds);
-
+    let startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
+
+    const sortedStartTasks = sortTasks(startTaskIds, this.state.tasks);
+
     const newStart = {
       ...start,
-      taskIds: startTaskIds
+      taskIds: sortedStartTasks
     };
 
     const finishTaskIds = Array.from(finish.taskIds);
     finishTaskIds.splice(destination.index, 0, draggableId);
+
+    const sortedFinishTasks = sortTasks(finishTaskIds, this.state.tasks);
+
     const newFinish = {
       ...finish,
-      taskIds: finishTaskIds
+      taskIds: sortedFinishTasks
     };
 
     const newState = {
@@ -201,8 +210,8 @@ class App extends Component {
 
     if (updatesAllowed) {
       //TODO: Call post endpoint here as the task has moved to a different column.
-      console.log('destination x ', destination.droppableId); //checkedIn or checkedOut
-      console.log('draggableId ', draggableId); //employee referecne
+      // console.log('destination x ', destination.droppableId); //checkedIn or checkedOut
+      // console.log('draggableId ', draggableId); //employee referecne
 
       if (destination.droppableId === 'checkedIn') {
         //Check in API
@@ -262,7 +271,6 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        <MainTitle>Please check in or out</MainTitle>
         <div className="container">
           <div className="row">
             <DragDropContext onDragEnd={this.onDragEnd}>
