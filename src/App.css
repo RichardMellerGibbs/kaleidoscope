@@ -16,6 +16,10 @@
   border: 1px solid red;
 }
 
+.navbar a:focus {
+  outline: none; /* Turns off the default blue border outline */
+}
+
 /***********************************************************/
 /* CheckInOut */
 /***********************************************************/
