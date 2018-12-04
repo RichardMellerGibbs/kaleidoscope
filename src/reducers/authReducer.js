@@ -16,6 +16,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isAuthenticated: !isEmpty(action.payload),
+        passwordReset: false,
         user: action.payload
       };
     case FORGOT_PASSWORD_SENT:
@@ -26,7 +27,8 @@ export default function(state = initialState, action) {
     case PASSWORD_RESET:
       return {
         ...state,
-        passwordReset: true
+        passwordReset: true,
+        forgotPasswordSent: false //This was the last change to make reset redirect to login
       };
     default:
       return state;

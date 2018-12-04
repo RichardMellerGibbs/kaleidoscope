@@ -5,7 +5,7 @@ import store from './store';
 import Navbar from './components/layout/navbar';
 import EntryExit from './components/entryExit/entryExit';
 import Login from './components/auth/login';
-
+import Reset from './components/auth/reset';
 import './App.css';
 
 class App extends Component {
@@ -18,6 +18,7 @@ class App extends Component {
             <Route exact path="/" component={EntryExit} />
             <div className="container">
               <Route exact path="/login" component={Login} />
+              <Route exact path="/reset" component={Reset} />
             </div>
           </div>
         </Router>

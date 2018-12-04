@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -11,6 +12,7 @@ import Column from './column';
 import Counter from './counter';
 import sortTasks from '../../common/sortTasks';
 import Spinner from '../../common/spinner';
+import { signUp, verifySignUp } from '../../common/manSignUp';
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +34,14 @@ class EntryExit extends Component {
     //Get the data async by calling redux action
     this.props.getCheckInOut();
   }
+
+  manSignUp = () => {
+    signUp();
+  };
+
+  verifySignUp = () => {
+    verifySignUp();
+  };
 
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -156,6 +166,12 @@ class EntryExit extends Component {
   }
 
   render() {
+    const { isAuthenticated } = this.props.auth;
+
+    if (!isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
+
     const { loading } = this.props.checkInOut;
     let innerContent;
     let content;
@@ -189,6 +205,12 @@ class EntryExit extends Component {
     return (
       <div className="container">
         <div className="row">
+          {/* <button className="btn btn-primary" onClick={this.manSignUp}>
+            Man Sign Up
+          </button>
+          <button className="btn btn-primary" onClick={this.verifySignUp}>
+            Verify
+          </button> */}
           <DragDropContext onDragEnd={this.onDragEnd}>
             <Container>{content}</Container>
           </DragDropContext>

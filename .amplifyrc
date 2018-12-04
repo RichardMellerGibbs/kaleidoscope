@@ -1,0 +1,14 @@
+{
+    "providers": {
+        "awscloudformation": {
+            "AuthRoleName": "kaleidoscope-20181202170930-authRole",
+            "UnauthRoleArn": "arn:aws:iam::430589010343:role/kaleidoscope-20181202170930-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::430589010343:role/kaleidoscope-20181202170930-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "kaleidoscope-20181202170930-deployment",
+            "UnauthRoleName": "kaleidoscope-20181202170930-unauthRole",
+            "StackName": "kaleidoscope-20181202170930",
+            "StackId": "arn:aws:cloudformation:eu-west-1:430589010343:stack/kaleidoscope-20181202170930/08990820-f655-11e8-bfe3-50fae9b6ecd2"
+        }
+    }
+}
