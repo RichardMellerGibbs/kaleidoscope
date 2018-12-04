@@ -51,3 +51,10 @@
   height: 200px;
   border: 1px solid #000;
 }
+
+/* Login */
+
+.forgot-password {
+  cursor: pointer;
+  color: #0000ee;
+}

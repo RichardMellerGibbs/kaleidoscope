@@ -1,41 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 import { Redirect } from 'react-router-dom';
-import { loginUser, forgotPassword } from '../../actions/authActions';
+import classnames from 'classnames';
+import { resetPassword } from '../../actions/authActions';
 
-class Login extends Component {
-  constructor() {
-    super();
+class Reset extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      email: '',
+      email: this.props.location.state.email,
       password: '',
       errors: {},
-      forgotPasswordSent: false,
+      code: '',
+      passwordReset: false,
       displayError: true
     };
   }
 
-  //Prevents access to register route if already logged in
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/');
-    }
-  }
-
-  //Where to go following login - home
+  //Where to go following password reset - login
   componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/');
-    }
-
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors, displayError: true });
     }
 
-    if (nextProps.auth.forgotPasswordSent) {
-      this.setState({ forgotPasswordSent: nextProps.auth.forgotPasswordSent });
+    if (nextProps.auth.passwordReset) {
+      this.setState({
+        passwordReset: nextProps.auth.passwordReset
+      });
     }
   }
 
@@ -49,23 +41,12 @@ class Login extends Component {
 
     const userData = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      password2: this.state.password2,
+      code: this.state.code
     };
 
-    this.props.loginUser(userData);
-    this.setState({ displayError: false });
-
-    //user.signInUserSession.idToken.payload
-  };
-
-  forgotPassword = e => {
-    e.preventDefault();
-
-    const userData = {
-      email: this.state.email
-    };
-
-    this.props.forgotPassword(userData);
+    this.props.resetPassword(userData);
     this.setState({ displayError: false });
   };
 
@@ -76,17 +57,9 @@ class Login extends Component {
 
   render() {
     const { errors } = this.state;
-    const { forgotPasswordSent, passwordReset } = this.props.auth;
 
-    if (forgotPasswordSent) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/reset',
-            state: { email: this.state.email }
-          }}
-        />
-      );
+    if (this.state.passwordReset) {
+      return <Redirect to="/login" />;
     }
 
     return (
@@ -94,29 +67,21 @@ class Login extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Log In</h1>
+              <h1 className="display-4 text-center">Reset Password</h1>
               <form onSubmit={this.onSubmit}>
-                {passwordReset && (
-                  <div className="alert alert-success warningPanel">
-                    <button className="close" onClick={this.clearError}>
-                      &times;
-                    </button>
-                    Your password has been reset. You can now login
-                  </div>
-                )}
                 <div className="form-group">
                   <input
-                    type="email"
+                    type="input"
                     className={classnames('form-control form-control-lg', {
-                      'is-invalid': errors.email
+                      'is-invalid': errors.code
                     })}
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
+                    placeholder="Code"
+                    name="code"
+                    value={this.state.code}
                     onChange={this.onChange}
                   />
-                  {errors.email && (
-                    <div className="invalid-feedback">{errors.email}</div>
+                  {errors.code && (
+                    <div className="invalid-feedback">{errors.code}</div>
                   )}
                 </div>
                 <div className="form-group">
@@ -134,19 +99,33 @@ class Login extends Component {
                     <div className="invalid-feedback">{errors.password}</div>
                   )}
                 </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
-                <div className="forgot-password" onClick={this.forgotPassword}>
-                  Forgot Password?
-                </div>
-                {this.state.forgotPasswordSent && !errors.forgot && (
+                {/* <div className="form-group">
+                  <input
+                    type="password"
+                    className={classnames('form-control form-control-lg', {
+                      'is-invalid': errors.password2
+                    })}
+                    placeholder="Confirm Password"
+                    name="password2"
+                    value={this.state.password2}
+                    onChange={this.onChange}
+                  />
+                  {errors.password2 && (
+                    <div className="invalid-feedback">{errors.password2}</div>
+                  )}
+                </div> */}
+                <input
+                  type="submit"
+                  className="btn btn-info btn-block mt-4 submit-button"
+                />
+                {/* {this.state.passwordReset && !errors.reset && (
                   <div className="alert alert-success warningPanel">
-                    <button className="close" data-dismiss="alert">
+                    <a className="close" data-dismiss="alert">
                       &times;
-                    </button>
-                    An email has been sent to your mailbox containing further
-                    instructions
+                    </a>
+                    Your password has been reset. You can now login
                   </div>
-                )}
+                )} */}
                 {errors.message && this.state.displayError && (
                   <div className="alert alert-danger">
                     <button className="close" onClick={this.clearError}>
@@ -164,9 +143,8 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  loginUser: PropTypes.func.isRequired,
-  forgotPassword: PropTypes.func.isRequired,
+Reset.propTypes = {
+  resetPassword: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -178,5 +156,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { loginUser, forgotPassword }
-)(Login);
+  { resetPassword }
+)(Reset);

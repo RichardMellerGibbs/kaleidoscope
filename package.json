@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@atlaskit/css-reset": "^3.0.3",
+    "aws-amplify": "^1.1.10",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "react": "^16.6.3",
