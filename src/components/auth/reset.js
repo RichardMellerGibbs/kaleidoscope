@@ -39,6 +39,14 @@ class Reset extends Component {
   onSubmit = e => {
     e.preventDefault();
 
+    if (this.state.password !== this.state.password2) {
+      this.setState({
+        displayError: true,
+        errors: { password2: 'Passwords do not match' }
+      });
+      return;
+    }
+
     const userData = {
       email: this.state.email,
       password: this.state.password,
@@ -69,6 +77,15 @@ class Reset extends Component {
             <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Reset Password</h1>
               <form onSubmit={this.onSubmit}>
+                {this.state.displayError && (
+                  <div className="alert alert-success warningPanel">
+                    <button className="close" onClick={this.clearError}>
+                      &times;
+                    </button>
+                    Please check your email for the verification code and enter
+                    it below
+                  </div>
+                )}
                 <div className="form-group">
                   <input
                     type="input"
@@ -99,7 +116,7 @@ class Reset extends Component {
                     <div className="invalid-feedback">{errors.password}</div>
                   )}
                 </div>
-                {/* <div className="form-group">
+                <div className="form-group">
                   <input
                     type="password"
                     className={classnames('form-control form-control-lg', {
@@ -113,7 +130,7 @@ class Reset extends Component {
                   {errors.password2 && (
                     <div className="invalid-feedback">{errors.password2}</div>
                   )}
-                </div> */}
+                </div>
                 <input
                   type="submit"
                   className="btn btn-info btn-block mt-4 submit-button"
