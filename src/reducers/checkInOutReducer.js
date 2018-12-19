@@ -1,9 +1,14 @@
-import { GET_CHECKINOUT, CHECKINOUT_LOADING } from '../actions/types';
+import {
+  GET_CHECKINOUT,
+  PUT_CHECKINOUT,
+  CHECKINOUT_LOADING
+} from '../actions/types';
 import sortTasks from '../common/sortTasks';
 
 const initialState = {
   checkInOut: null,
-  loading: false
+  loading: false,
+  itemPut: false
 };
 
 export default function(state = initialState, action) {
@@ -16,11 +21,16 @@ export default function(state = initialState, action) {
     case GET_CHECKINOUT:
       //console.log('GET_CHECKINOU reducer running');
       const newState = prepData(action.payload);
-      //console.log('GET_CHECKINOU newState ', newState);
       return {
         ...state,
-        //checkInOut: action.payload,
         checkInOut: newState,
+        itemPut: false,
+        loading: false
+      };
+    case PUT_CHECKINOUT:
+      return {
+        ...state,
+        itemPut: true,
         loading: false
       };
     default:
