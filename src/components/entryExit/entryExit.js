@@ -4,8 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import axios from 'axios';
-import { getCheckInOut } from '../../actions/checkInOutActions';
+//import axios from 'axios';
+//import { Auth } from 'aws-amplify';
+import {
+  getCheckInOut,
+  checkIn,
+  checkOut
+} from '../../actions/checkInOutActions';
 //import initialData from './components/entryExit/data';
 //import testData from './components/entryExit/testData';
 import Column from './column';
@@ -27,12 +32,17 @@ class EntryExit extends Component {
       checkedIn: {},
       checkedOut: {}
     },
-    columnOrder: []
+    columnOrder: [],
+    token: ''
   };
 
   componentDidMount() {
-    //Get the data async by calling redux action
-    this.props.getCheckInOut();
+    const { user, isAuthenticated } = this.props.auth;
+
+    if (isAuthenticated) {
+      const jwtToken = user.signInUserSession.idToken.jwtToken;
+      this.props.getCheckInOut(jwtToken);
+    }
   }
 
   manSignUp = () => {
@@ -127,16 +137,18 @@ class EntryExit extends Component {
           CheckedInDateTime: timeNow
         };
 
-        axios
-          .put(
-            'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev',
-            workerCheckIn
-          )
-          .then(res => {
-            //console.log('return from checkedin');
-            //console.log(res.data);
-          })
-          .catch(err => console.log(err));
+        this.props.checkIn(workerCheckIn, this.state.jwtToken);
+
+        // axios
+        //   .put(
+        //     'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev',
+        //     workerCheckIn
+        //   )
+        //   .then(res => {
+        //     console.log('return from checkedin res ', res);
+        //     //console.log(res.data);
+        //   })
+        //   .catch(err => console.log(err));
       } else {
         //Check out API
         let workerCheckout = {
@@ -144,16 +156,18 @@ class EntryExit extends Component {
           CheckedOutDateTime: timeNow
         };
 
-        axios
-          .put(
-            'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev',
-            workerCheckout
-          )
-          .then(res => {
-            //console.log('return from checkedout');
-            //console.log(res.data);
-          })
-          .catch(err => console.log(err));
+        this.props.checkOut(workerCheckout, this.state.jwtToken);
+
+        // axios
+        //   .put(
+        //     'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev',
+        //     workerCheckout
+        //   )
+        //   .then(res => {
+        //     //console.log('return from checkedout');
+        //     //console.log(res.data);
+        //   })
+        //   .catch(err => console.log(err));
       }
     }
   };
@@ -161,7 +175,10 @@ class EntryExit extends Component {
   //Bring the initialdata into local state causing a re-render
   componentWillReceiveProps(nextProps) {
     if (nextProps.checkInOut !== this.props.checkInOut) {
-      this.setState(nextProps.checkInOut.checkInOut);
+      //Prevents the state changing for a put. This in turn stops a re-render for a better UX
+      if (!nextProps.checkInOut.itemPut) {
+        this.setState(nextProps.checkInOut.checkInOut);
+      }
     }
   }
 
@@ -233,5 +250,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getCheckInOut }
+  { getCheckInOut, checkIn, checkOut }
 )(EntryExit);

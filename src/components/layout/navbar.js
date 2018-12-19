@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { logoutUser } from '../../actions/authActions';
+import { logoutUser, getCurrentUser } from '../../actions/authActions';
 import styled from 'styled-components';
 
 const NavButton = styled.div`
@@ -22,6 +22,10 @@ const Project = styled.div`
 `;
 
 class Navbar extends Component {
+  componentDidMount() {
+    this.props.getCurrentUser();
+  }
+
   onLogoutClick(e) {
     e.preventDefault();
     this.props.logoutUser();
@@ -67,7 +71,6 @@ class Navbar extends Component {
             />
             Marvin Informatics <Project>Renai</Project>
           </Link>
-          {/* <Project>Renai</Project> */}
           <button
             className="navbar-toggler"
             type="button"
@@ -99,7 +102,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, getCurrentUser }
 )(Navbar);
-
-//export default Navbar;

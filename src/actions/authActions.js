@@ -55,6 +55,17 @@ export const loginUser = userData => dispatch => {
     });
 };
 
+//Get logged in user
+export const getCurrentUser = () => dispatch => {
+  Auth.currentAuthenticatedUser()
+    .then(user => {
+      dispatch(setCurrentUser(user));
+    })
+    .catch(err => {
+      dispatch(setCurrentUser({}));
+    });
+};
+
 //Set logged in user
 export const setCurrentUser = userData => {
   return {
