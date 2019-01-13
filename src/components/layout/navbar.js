@@ -9,8 +9,8 @@ const NavButton = styled.div`
   background: none !important;
   color: inherit;
   border: none;
-  padding: 0 !important;
   font: inherit;
+  font-size: 120%;
   cursor: pointer;
 `;
 
@@ -31,6 +31,11 @@ class Navbar extends Component {
     this.props.logoutUser();
   }
 
+  onTaskClick(e) {
+    e.preventDefault();
+    this.props.logoutUser();
+  }
+
   render() {
     const { isAuthenticated } = this.props.auth;
 
@@ -38,6 +43,20 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <Link className="nav-link" to="/" />
+        </li>
+        <li className="nav-item">
+          <NavButton>
+            <Link className="nav-link" to="/">
+              Check In
+            </Link>
+          </NavButton>
+        </li>
+        <li className="nav-item">
+          <NavButton>
+            <Link className="nav-link" to="/workerTasks">
+              Tasks
+            </Link>
+          </NavButton>
         </li>
         <li className="nav-item">
           <NavButton

@@ -4,7 +4,8 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   FORGOT_PASSWORD_SENT,
-  PASSWORD_RESET
+  PASSWORD_RESET,
+  GET_CURRENT_USER_LOADING
 } from './types';
 
 // AWS Forgot password
@@ -57,6 +58,7 @@ export const loginUser = userData => dispatch => {
 
 //Get logged in user
 export const getCurrentUser = () => dispatch => {
+  dispatch(getCurrentUserLoading());
   Auth.currentAuthenticatedUser()
     .then(user => {
       dispatch(setCurrentUser(user));
@@ -83,4 +85,11 @@ export const logoutUser = history => dispatch => {
     .catch(() => {
       console.log('error signing out ');
     });
+};
+
+//GenericSpool loading
+export const getCurrentUserLoading = () => {
+  return {
+    type: GET_CURRENT_USER_LOADING
+  };
 };

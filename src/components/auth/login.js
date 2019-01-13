@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Redirect } from 'react-router-dom';
 import { loginUser, forgotPassword } from '../../actions/authActions';
+import Spinner from '../../common/spinner';
 
 class Login extends Component {
   constructor() {
@@ -17,7 +18,6 @@ class Login extends Component {
     };
   }
 
-  //Prevents access to register route if already logged in
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push('/');
@@ -76,7 +76,15 @@ class Login extends Component {
 
   render() {
     const { errors } = this.state;
-    const { forgotPasswordSent, passwordReset } = this.props.auth;
+    const {
+      forgotPasswordSent,
+      passwordReset,
+      authenticating
+    } = this.props.auth;
+
+    if (authenticating) {
+      return <Spinner />;
+    }
 
     if (forgotPasswordSent) {
       return (
