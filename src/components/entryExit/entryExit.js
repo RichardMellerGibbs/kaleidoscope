@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-//import axios from 'axios';
-//import { Auth } from 'aws-amplify';
+
 import {
   getCheckInOut,
   checkIn,
@@ -17,7 +16,7 @@ import Column from './column';
 import Counter from './counter';
 import sortTasks from '../../common/sortTasks';
 import Spinner from '../../common/spinner';
-import { signUp, verifySignUp } from '../../common/manSignUp';
+//import { signUp, verifySignUp } from '../../common/manSignUp';
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +24,6 @@ const Container = styled.div`
 `;
 
 class EntryExit extends Component {
-  //state = initialData;
   state = {
     tasks: {},
     columns: {
@@ -45,13 +43,13 @@ class EntryExit extends Component {
     }
   }
 
-  manSignUp = () => {
-    signUp();
-  };
+  // manSignUp = () => {
+  //   signUp();
+  // };
 
-  verifySignUp = () => {
-    verifySignUp();
-  };
+  // verifySignUp = () => {
+  //   verifySignUp();
+  // };
 
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -157,17 +155,6 @@ class EntryExit extends Component {
         };
 
         this.props.checkOut(workerCheckout, this.state.jwtToken);
-
-        // axios
-        //   .put(
-        //     'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev',
-        //     workerCheckout
-        //   )
-        //   .then(res => {
-        //     //console.log('return from checkedout');
-        //     //console.log(res.data);
-        //   })
-        //   .catch(err => console.log(err));
       }
     }
   };
