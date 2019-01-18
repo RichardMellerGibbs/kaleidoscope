@@ -1,50 +1,39 @@
 import {
-  GET_ACTIVE_USERS,
-  ACTIVE_USER_LOADING,
-  GET_GENERIC_SPOOLS,
-  GENERIC_SPOOL_LOADING,
-  PUT_MOVESPOOL
+  GET_GENERIC_TASKS,
+  GET_USERS_AND_TASKS_LOADING,
+  PUT_MOVE_TASK
 } from "../actions/types";
 
 const initialState = {
   activeUsers: [],
-  genericSpools: {},
+  genericTasks: {},
   loading: false,
-  spoolLoading: false,
-  itemPut: false
+  putting: false,
+  moveInstruction: {}
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_ACTIVE_USERS:
+    case GET_USERS_AND_TASKS_LOADING:
+      return {
+        ...state,
+        loading: true,
+        moveInstruction: {}
+      };
+    case GET_GENERIC_TASKS:
+      const newState = prepData(action.payload.genericTasks.data);
       return {
         ...state,
         loading: false,
-        itemPut: false,
-        activeUsers: action.payload.res.data
+        genericTasks: newState,
+        activeUsers: action.payload.activeUsers.data,
+        moveInstruction: {}
       };
-    case ACTIVE_USER_LOADING:
+    case PUT_MOVE_TASK:
       return {
         ...state,
-        loading: true
-      };
-    case GET_GENERIC_SPOOLS:
-      const newState = prepData(action.payload.res.data);
-      return {
-        ...state,
-        spoolLoading: false,
-        itemPut: false,
-        genericSpools: newState
-      };
-    case GENERIC_SPOOL_LOADING:
-      return {
-        ...state,
-        spoolLoading: true
-      };
-    case PUT_MOVESPOOL:
-      return {
-        ...state,
-        itemPut: true
+        loading: false,
+        moveInstruction: action.payload
       };
     default:
       return state;
@@ -81,9 +70,9 @@ const prepData = payload => {
     columnOrder.push(column.locationId);
   });
 
-  // console.log('tasks = ', tasks);
-  // console.log('columns = ', columns);
-  // console.log('columnOrder = ', columnOrder);
+  // console.log("tasks = ", tasks);
+  // console.log("columns = ", columns);
+  // console.log("columnOrder = ", columnOrder);
 
   const initialTaskState = {
     tasks,

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { logoutUser, getCurrentUser } from '../../actions/authActions';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser, getCurrentUser } from "../../actions/authActions";
+import styled from "styled-components";
 
 const NavButton = styled.div`
   background: none !important;
@@ -17,7 +17,7 @@ const NavButton = styled.div`
 const Project = styled.div`
   display: inline-block;
   padding-left: 10px;
-  font-family: 'Aguafina Script', cursive;
+  font-family: "Aguafina Script", cursive;
   font-size: 150%;
 `;
 
@@ -53,11 +53,18 @@ class Navbar extends Component {
         </li>
         <li className="nav-item">
           <NavButton>
-            <Link className="nav-link" to="/workerTasks">
+            <Link className="nav-link" to="/moveTasks">
               Tasks
             </Link>
           </NavButton>
         </li>
+        {/* <li className="nav-item">
+          <NavButton>
+            <Link className="nav-link" to="/workerTasks">
+              Tasks
+            </Link>
+          </NavButton>
+        </li> */}
         <li className="nav-item">
           <NavButton
             onClick={this.onLogoutClick.bind(this)}
@@ -85,7 +92,7 @@ class Navbar extends Component {
           <Link className="navbar-brand" to="/">
             <img
               className="nav-logo"
-              src={require('../../img/m.png')}
+              src={require("../../img/m.png")}
               alt="company logo"
             />
             Marvin Informatics <Project>Renai</Project>
