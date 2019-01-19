@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
-import styled from 'styled-components';
-import sortTasks from '../../common/sortTasks';
-import Spinner from '../../common/spinner';
-import Column from './column';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { DragDropContext } from "react-beautiful-dnd";
+import styled from "styled-components";
+import sortTasks from "../../common/sortTasks";
+import Spinner from "../../common/spinner";
+import Column from "./column";
 
 import {
   getGenericSpools,
   moveSpool,
   moveToUserSpool,
   moveFromUserSpool
-} from '../../actions/workerTaskActions';
+} from "../../actions/workerTaskActions";
 
 const Container = styled.div`
   display: flex;
@@ -130,10 +130,10 @@ class TaskItems extends Component {
       //console.log('start ', start);
       //console.log('finish ', finish);
 
-      let taskMove = '';
+      let taskMove = "";
 
       //if moving to user
-      if (finish.id === 'USER') {
+      if (finish.id === "USER") {
         taskMove = {
           reference: this.props.employee,
           spoolDetail: {
@@ -145,7 +145,7 @@ class TaskItems extends Component {
         };
 
         this.props.moveToUserSpool(taskMove, jwtToken);
-      } else if (start.id === 'USER') {
+      } else if (start.id === "USER") {
         //console.log('moving from user');
         taskMove = {
           employeeRef: this.props.employee,
@@ -173,12 +173,13 @@ class TaskItems extends Component {
 
   replaceUserColumn(userSpools) {
     let newTasks = {};
-    let newColumns = Object.assign({}, this.state.columns);
-    let newColumnOrder = this.state.columnOrder.slice(0);
+    let newColumns = { ...this.state.columns };
+    //let newColumnOrder = this.state.columnOrder.slice(0);
+    let newColumnOrder = [...this.state.columnOrder];
 
     //Delete any current user tasks
     for (let task in this.state.tasks) {
-      if (this.state.tasks[task].spoolName !== 'My Tasks') {
+      if (this.state.tasks[task].spoolName !== "My Tasks") {
         newTasks[task] = {
           id: task,
           status: this.state.tasks[task].status,
@@ -190,9 +191,9 @@ class TaskItems extends Component {
 
     // console.log('this.state.tasks ', this.state.tasks);
     // console.log('this.state.columns ', this.state.columns);
-    // console.log('userSpools ', userSpools);
+    console.log("userSpools ", userSpools);
 
-    delete newColumns['USER'];
+    delete newColumns["USER"];
 
     //Add the newly selected users task data
     if (userSpools.length > 0) {
@@ -207,17 +208,17 @@ class TaskItems extends Component {
     }
 
     //Now add the column data
-    newColumns['USER'] = {
-      id: 'USER',
-      title: 'My Tasks',
+    newColumns["USER"] = {
+      id: "USER",
+      title: "My Tasks",
       taskIds: userSpools.map(spool => {
         return spool.Spool;
       })
     };
 
     //Add the USER column if necessary
-    if (newColumnOrder[0] !== 'USER') {
-      newColumnOrder.unshift('USER');
+    if (newColumnOrder[0] !== "USER") {
+      newColumnOrder.unshift("USER");
     }
 
     this.setState({
@@ -262,8 +263,8 @@ class TaskItems extends Component {
 
     const { spoolLoading } = this.props.genericSpools;
 
-    let mainContent = '';
-    let taskLists = '';
+    let mainContent = "";
+    let taskLists = "";
 
     if (spoolLoading) {
       mainContent = <Spinner />;

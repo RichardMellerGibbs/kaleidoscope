@@ -2,8 +2,8 @@ import {
   GET_CHECKINOUT,
   PUT_CHECKINOUT,
   CHECKINOUT_LOADING
-} from '../actions/types';
-import sortTasks from '../common/sortTasks';
+} from "../actions/types";
+import sortTasks from "../common/sortTasks";
 
 const initialState = {
   checkInOut: null,
@@ -42,13 +42,13 @@ const prepData = payload => {
   //console.log('payload.checkInResponse ', payload.checkInResponse.data);
 
   let checkedInData = payload.checkInResponse.data.map(worker => {
-    worker.category = 'checkedIn';
+    worker.category = "checkedIn";
     return worker;
   });
 
   /************************************************/
   /* Extra employees here
-          /************************************************/
+  /************************************************/
   // testData.forEach(testEmployee => {
   //   checkedInData.push(testEmployee);
   // });
@@ -60,7 +60,7 @@ const prepData = payload => {
   //console.log('now ', checkedInData);
 
   let checkedOutWorkers = payload.checkOutResponse.data.map(worker => {
-    worker.category = 'checkedOut';
+    worker.category = "checkedOut";
     return worker;
   });
 
@@ -84,7 +84,7 @@ const prepData = payload => {
 
   let checkInUnsortedTasks = [];
   initialWorkers.forEach(worker => {
-    if (worker.category === 'checkedIn') {
+    if (worker.category === "checkedIn") {
       checkInUnsortedTasks.push(worker.reference);
     }
   });
@@ -95,7 +95,7 @@ const prepData = payload => {
 
   let checkOutUnsortedTasks = [];
   initialWorkers.forEach(worker => {
-    if (worker.category === 'checkedOut')
+    if (worker.category === "checkedOut")
       checkOutUnsortedTasks.push(worker.reference);
   });
 
@@ -105,17 +105,17 @@ const prepData = payload => {
     tasks,
     columns: {
       checkedIn: {
-        id: 'checkedIn',
-        title: 'Checked In',
+        id: "checkedIn",
+        title: "Checked In",
         taskIds: checkInTasks
       },
       checkedOut: {
-        id: 'checkedOut',
-        title: 'Checked Out',
+        id: "checkedOut",
+        title: "Checked Out",
         taskIds: checkOutTasks
       }
     },
-    columnOrder: ['checkedOut', 'checkedIn']
+    columnOrder: ["checkedOut", "checkedIn"]
   };
 
   // console.log('initialWorkers ', initialWorkers);

@@ -4,7 +4,7 @@ import {
   GET_GENERIC_SPOOLS,
   GENERIC_SPOOL_LOADING,
   PUT_MOVESPOOL
-} from '../actions/types';
+} from "../actions/types";
 
 const initialState = {
   activeUsers: [],
