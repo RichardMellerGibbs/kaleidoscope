@@ -312,8 +312,9 @@ class MoveTasks extends Component {
               return null;
             }
             if (
-              (columnId === "left" && col.name === this.state.rightColItem) ||
-              (columnId === "right" && col.name === this.state.leftColItem)
+              (columnId === "left" &&
+                col.reference === this.state.rightColItem) ||
+              (columnId === "right" && col.reference === this.state.leftColItem)
             ) {
               return (
                 <option disabled value={col.reference} key={col.reference}>
