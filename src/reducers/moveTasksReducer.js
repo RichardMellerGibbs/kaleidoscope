@@ -1,7 +1,6 @@
 import {
   GET_GENERIC_TASKS,
-  GET_USERS_AND_TASKS_LOADING,
-  PUT_MOVE_TASK
+  GET_USERS_AND_TASKS_LOADING
 } from "../actions/types";
 
 const initialState = {
@@ -29,20 +28,12 @@ export default function(state = initialState, action) {
         activeUsers: action.payload.activeUsers.data,
         moveInstruction: {}
       };
-    case PUT_MOVE_TASK:
-      return {
-        ...state,
-        loading: false,
-        moveInstruction: action.payload
-      };
     default:
       return state;
   }
 }
 
 const prepData = payload => {
-  //console.log('workerTaskReducer reducer payload ', payload);
-
   let tasks = {};
   let columns = {};
   let columnOrder = [];
@@ -70,19 +61,11 @@ const prepData = payload => {
     columnOrder.push(column.locationId);
   });
 
-  // console.log("tasks = ", tasks);
-  // console.log("columns = ", columns);
-  // console.log("columnOrder = ", columnOrder);
-
   const initialTaskState = {
     tasks,
     columns,
     columnOrder
   };
 
-  // console.log('initialTaskState ', initialTaskState);
-
-  //this.setState({ workers: initialWorkers });
-  //this.setState(initialTaskState);
   return initialTaskState;
 };

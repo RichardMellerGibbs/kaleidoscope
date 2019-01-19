@@ -60,94 +60,71 @@ class MoveTasks extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //console.log("and the  state is ", this.state);
-    //console.log("mt nextProps.moveTasks.putting", nextProps.moveTasks.putting);
-    //if (nextProps.moveTasks.putting) return;
-
     if (nextProps.moveTasks !== this.props.moveTasks) {
-      //console.log("move = ", nextProps.moveTasks.moveInstruction);
+      //Sort the columnOrder
+      let sortedColumnItems = nextProps.moveTasks.genericTasks.columnOrder;
+      let sortedActiveUsers = nextProps.moveTasks.activeUsers;
 
-      //Change the internal state to reflect the server state following the task item move
-      if (Object.keys(nextProps.moveTasks.moveInstruction).length > 0) {
-        const move = nextProps.moveTasks.moveInstruction;
-        let newCols = { ...this.state.columns };
-        let newTasks = { ...this.state.tasks };
-        let newActiveUsers = [...this.state.activeUsers];
+      if (nextProps.moveTasks.genericTasks.columnOrder) {
+        sortedColumnItems = sortTasks(
+          nextProps.moveTasks.genericTasks.columnOrder,
+          nextProps.moveTasks.genericTasks.columns
+        );
 
-        //Remove task where it came from
-        const taskIndex = newCols[move.fromCol].taskIds.indexOf(move.taskId);
-        if (taskIndex > -1) {
-          newCols[move.fromCol].taskIds.splice(taskIndex, 1);
-        }
-
-        //console.log("newCols ", newCols);
-
-        //Add task where it is going
-        newCols[move.toCol].taskIds.push(move.taskId);
-
-        //If from a user then remove the task from the activeUsers list
-        if (move.fromCol === "USER") {
-          for (let user of newActiveUsers) {
-            if (user.reference === this.state.employee) {
-              for (let i = 0; i < user.spools.length; i++) {
-                if (user.spools[i].Spool === move.taskId) {
-                  user.spools.splice(i, 1);
-                  break;
-                }
-              }
-              break;
-            }
-          }
-        }
-
-        //If to a user then add the task to the activeUsers list
-        if (move.toCol === "USER") {
-          for (let i = 0; i < newActiveUsers.length; i++) {
-            if (newActiveUsers[i].reference === this.state.employee) {
-              newActiveUsers[i].spools.push({
-                Activity: this.state.tasks[move.taskId].spoolName,
-                EndDate: "None",
-                Spool: this.state.tasks[move.taskId].id,
-                StartDate: this.state.tasks[move.taskId].startDate,
-                spoolName: this.state.tasks[move.taskId].spoolName
-              });
-              break;
-            }
-          }
-        }
-
-        //Only change those elements of the state that is absolutely necessary to reflect the move
-        this.setState({
-          ...this.state,
-          tasks: newTasks,
-          columns: newCols
-        });
-      } else {
-        //Sort the columnOrder
-        let sortedColumnItems = nextProps.moveTasks.genericTasks.columnOrder;
-        let sortedActiveUsers = nextProps.moveTasks.activeUsers;
-
-        if (nextProps.moveTasks.genericTasks.columnOrder) {
-          sortedColumnItems = sortTasks(
-            nextProps.moveTasks.genericTasks.columnOrder,
-            nextProps.moveTasks.genericTasks.columns
-          );
-
-          //Sort the users
-          sortedActiveUsers = sortUsers(nextProps.moveTasks.activeUsers);
-        }
-
-        this.setState({
-          ...this.state,
-          activeUsers: sortedActiveUsers,
-          tasks: nextProps.moveTasks.genericTasks.tasks,
-          columns: nextProps.moveTasks.genericTasks.columns,
-          columnOrder: sortedColumnItems
-        });
-        //console.log("nextProps.moveTasks ", nextProps.moveTasks);
+        //Sort the users
+        sortedActiveUsers = sortUsers(nextProps.moveTasks.activeUsers);
       }
+
+      this.setState({
+        ...this.state,
+        activeUsers: sortedActiveUsers,
+        tasks: nextProps.moveTasks.genericTasks.tasks,
+        columns: nextProps.moveTasks.genericTasks.columns,
+        columnOrder: sortedColumnItems
+      });
     }
   }
+
+  //Absorb child state
+  disColTaskMoved = (cols, move) => {
+    let newActiveUsers = [...this.state.activeUsers];
+
+    //If from a user then remove the task from the activeUsers list
+    if (move.fromCol === "USER") {
+      for (let user of newActiveUsers) {
+        if (user.reference === this.state.employee) {
+          for (let i = 0; i < user.spools.length; i++) {
+            if (user.spools[i].Spool === move.taskId) {
+              user.spools.splice(i, 1);
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+    //If to a user then add the task to the activeUsers list
+    if (move.toCol === "USER") {
+      for (let i = 0; i < newActiveUsers.length; i++) {
+        if (newActiveUsers[i].reference === this.state.employee) {
+          newActiveUsers[i].spools.push({
+            Activity: this.state.tasks[move.taskId].spoolName,
+            EndDate: "None",
+            Spool: this.state.tasks[move.taskId].id,
+            StartDate: this.state.tasks[move.taskId].startDate,
+            spoolName: this.state.tasks[move.taskId].spoolName
+          });
+          break;
+        }
+      }
+    }
+
+    this.setState({
+      ...this.state,
+      columns: cols,
+      activeUsers: newActiveUsers
+    });
+  };
 
   userSelected = e => {
     this.addUserToLeftCol(e.target.value);
@@ -163,19 +140,16 @@ class MoveTasks extends Component {
   };
 
   leftColSelected = e => {
-    //todo remove My Tasks from leftcol
     let newCols = { ...this.state.columns };
     let newColOrder = [...this.state.columnOrder];
 
-    //console.log("col order ", this.state.columnOrder);
-
+    //Remove user from left col if it is present
     delete newCols["USER"];
 
     var index = newColOrder.indexOf("USER");
     if (index > -1) {
       newColOrder.splice(index, 1);
     }
-    //console.log("lcs newCols ord ", newColOrder);
 
     this.setState({
       ...this.state,
@@ -198,8 +172,6 @@ class MoveTasks extends Component {
     let newColumns = { ...this.state.columns };
     let newColumnOrder = [...this.state.columnOrder];
 
-    //console.log("this.state.activeUsers ", this.state.activeUsers);
-
     let userSpools = "";
     for (let user of this.state.activeUsers) {
       if (user.reference === employee) {
@@ -215,14 +187,8 @@ class MoveTasks extends Component {
       }
     }
 
-    // console.log("newtasks after delete ", newTasks);
-    // console.log("this.state.tasks ", this.state.tasks);
-    // console.log("this.state.columns ", this.state.columns);
-    // console.log("userSpools ", userSpools);
-
+    //and from the columns
     delete newColumns["USER"];
-
-    //console.log("newColumnOrder item 2 is = ", newColumnOrder[1]);
 
     //Add the newly selected users task data
     if (userSpools.length > 0) {
@@ -250,12 +216,6 @@ class MoveTasks extends Component {
       newColumnOrder.unshift("USER");
     }
 
-    // console.log("new tasks ", newTasks);
-    // console.log("new cols ", newColumns);
-    // console.log("new cols order ", newColumnOrder);
-    // console.log("employee ", employee);
-
-    //Also
     //pre-pop right col with first item to allow columns to render
     let newRightColItem = this.state.rightColItem;
     if (newRightColItem === "initial") {
@@ -281,7 +241,6 @@ class MoveTasks extends Component {
     }
 
     const { loading } = this.props.moveTasks;
-    //console.log("his.props.moveTasks ", this.props.moveTasks);
 
     let userItems = "";
     let userContent = ""; //UserDropdown list
@@ -384,7 +343,6 @@ class MoveTasks extends Component {
               name: "My Tasks"
             };
           } else {
-            //console.log("column properties ", this.state.columns[col]);
             return {
               reference: col,
               name: this.state.columns[col].title
@@ -429,9 +387,6 @@ class MoveTasks extends Component {
         this.state.rightColItem !== INITIAL
       ) {
         const columns = [this.state.leftColItem, this.state.rightColItem];
-        // console.log("dis columns ", columns);
-        // console.log("all cols ", this.state.columns);
-        // console.log("all tasks ", this.state.tasks);
 
         columnsContent = (
           <DisplayColumns
@@ -439,6 +394,7 @@ class MoveTasks extends Component {
             colData={this.state.columns}
             tasks={this.state.tasks}
             employee={this.state.employee}
+            disColTaskMoved={this.disColTaskMoved}
           />
         );
       }

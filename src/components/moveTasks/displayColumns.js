@@ -114,14 +114,26 @@ class DisplayColumns extends Component {
       taskIds: sortedFinishTasks
     };
 
+    const newColumns = {
+      ...this.state.columns,
+      [newStart.id]: newStart,
+      [newFinish.id]: newFinish
+    };
+
     const newState = {
       ...this.state,
-      columns: {
-        ...this.state.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish
-      }
+      columns: newColumns
     };
+
+    //Needed to update activeUsers in moveTasks
+    const moveInstruction = {
+      fromCol: start.id,
+      toCol: finish.id,
+      taskId: draggableId
+    };
+
+    //Passing columns state back to parent to keep it's state upto date
+    this.props.disColTaskMoved(newColumns, moveInstruction);
 
     this.setState(newState);
 
@@ -131,16 +143,7 @@ class DisplayColumns extends Component {
     if (updatesAllowed) {
       //call endpoint api to update
 
-      //console.log('start ', start);
-      //console.log('finish ', finish);
-
       let taskMove = "";
-
-      const moveInstruction = {
-        fromCol: start.id,
-        toCol: finish.id,
-        taskId: draggableId
-      };
 
       //if moving to user
       if (finish.id === "USER") {
@@ -173,12 +176,8 @@ class DisplayColumns extends Component {
           StartDate: timeNow
         };
 
-        //console.log("moveInstruction ", moveInstruction);
-
         this.props.moveGenericTask(taskMove, jwtToken, moveInstruction);
       }
-
-      //console.log("taskMove ", taskMove);
     }
   };
 
