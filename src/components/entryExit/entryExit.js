@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { DragDropContext } from "react-beautiful-dnd";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 
 import {
   getCheckInOut,
   checkIn,
   checkOut
-} from "../../actions/checkInOutActions";
+} from '../../actions/checkInOutActions';
 //import initialData from './components/entryExit/data';
 //import testData from './components/entryExit/testData';
-import Column from "./column";
-import Counter from "./counter";
-import sortTasks from "../../common/sortTasks";
-import Spinner from "../../common/spinner";
+import Column from './column';
+import Counter from './counter';
+import sortTasks from '../../common/sortTasks';
+import Spinner from '../../common/spinner';
 //import { signUp, verifySignUp } from '../../common/manSignUp';
 
 const Container = styled.div`
@@ -31,7 +31,7 @@ class EntryExit extends Component {
       checkedOut: {}
     },
     columnOrder: [],
-    token: ""
+    token: ''
   };
 
   componentDidMount() {
@@ -94,12 +94,7 @@ class EntryExit extends Component {
     let startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
 
-    console.log("startTaskIds ", startTaskIds);
-    console.log("this.state.tasks ", this.state.tasks);
-
     const sortedStartTasks = sortTasks(startTaskIds, this.state.tasks);
-
-    console.log("sortedTasks ", sortedStartTasks);
 
     const newStart = {
       ...start,
@@ -133,7 +128,7 @@ class EntryExit extends Component {
     if (updatesAllowed) {
       //Call post endpoint here as the task has moved to a different column.
 
-      if (destination.droppableId === "checkedIn") {
+      if (destination.droppableId === 'checkedIn') {
         //Check in API
         let workerCheckIn = {
           WorkerRef: draggableId,
@@ -194,14 +189,14 @@ class EntryExit extends Component {
         const column = this.state.columns[columnId];
         const tasks = column.taskIds.map(taskId => this.state.tasks[taskId]);
 
-        if (columnId === "checkedIn") checkedInCount = tasks.length;
-        if (columnId === "checkedOut") checkedOutCount = tasks.length;
+        if (columnId === 'checkedIn') checkedInCount = tasks.length;
+        if (columnId === 'checkedOut') checkedOutCount = tasks.length;
 
         return <Column key={column.id} column={column} tasks={tasks} />;
       });
 
       if (checkedInCount === 0 && checkedOutCount !== 0)
-        checkedOutCount = "All staff have left the building";
+        checkedOutCount = 'All staff have left the building';
 
       //The array allows multiple adjacent elements to be rendered
       content = [

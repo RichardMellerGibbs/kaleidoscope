@@ -54,8 +54,6 @@ class Login extends Component {
 
     this.props.loginUser(userData);
     this.setState({ displayError: false });
-
-    //user.signInUserSession.idToken.payload
   };
 
   forgotPassword = e => {

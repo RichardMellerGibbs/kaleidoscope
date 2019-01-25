@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Container = styled.div`
   margin: 8px;
@@ -23,13 +24,16 @@ const Count = styled.div`
   top: 50%;
   transform: translateY(-50%);
 `;
+const Counter = props => {
+  return (
+    <Container>
+      <Count>{props.countValue}</Count>
+    </Container>
+  );
+};
 
-export default class counter extends Component {
-  render() {
-    return (
-      <Container>
-        <Count>{this.props.countValue}</Count>
-      </Container>
-    );
-  }
-}
+Counter.propTypes = {
+  countValue: PropTypes.string.isRequired
+};
+
+export default Counter;
