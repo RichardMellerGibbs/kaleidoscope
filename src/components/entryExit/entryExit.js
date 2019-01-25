@@ -94,12 +94,7 @@ class EntryExit extends Component {
     let startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
 
-    console.log("startTaskIds ", startTaskIds);
-    console.log("this.state.tasks ", this.state.tasks);
-
     const sortedStartTasks = sortTasks(startTaskIds, this.state.tasks);
-
-    console.log("sortedTasks ", sortedStartTasks);
 
     const newStart = {
       ...start,

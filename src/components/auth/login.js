@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import classnames from 'classnames';
-import { Redirect } from 'react-router-dom';
-import { loginUser, forgotPassword } from '../../actions/authActions';
-import Spinner from '../../common/spinner';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
+import { Redirect } from "react-router-dom";
+import { loginUser, forgotPassword } from "../../actions/authActions";
+import Spinner from "../../common/spinner";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       errors: {},
       forgotPasswordSent: false,
       displayError: true
@@ -20,14 +20,14 @@ class Login extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push("/");
     }
   }
 
   //Where to go following login - home
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push("/");
     }
 
     if (nextProps.errors) {
@@ -54,8 +54,6 @@ class Login extends Component {
 
     this.props.loginUser(userData);
     this.setState({ displayError: false });
-
-    //user.signInUserSession.idToken.payload
   };
 
   forgotPassword = e => {
@@ -90,7 +88,7 @@ class Login extends Component {
       return (
         <Redirect
           to={{
-            pathname: '/reset',
+            pathname: "/reset",
             state: { email: this.state.email }
           }}
         />
@@ -115,8 +113,8 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className={classnames('form-control form-control-lg', {
-                      'is-invalid': errors.email
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.email
                     })}
                     placeholder="Email Address"
                     name="email"
@@ -130,8 +128,8 @@ class Login extends Component {
                 <div className="form-group">
                   <input
                     type="password"
-                    className={classnames('form-control form-control-lg', {
-                      'is-invalid': errors.password
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password
                     })}
                     placeholder="Password"
                     name="password"

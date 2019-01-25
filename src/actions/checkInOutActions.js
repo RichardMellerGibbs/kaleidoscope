@@ -1,13 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
 
 import {
   GET_CHECKINOUT,
   PUT_CHECKINOUT,
   CHECKINOUT_LOADING,
   GET_ERRORS
-} from './types';
+} from "./types";
 
-// "proxyCheckIn": "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev",
+//Prod versions
+let checkedInUsersUrl =
+  "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+let checkedOutUsersUrl =
+  "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+let checkInUrl = "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev";
+let checkOutUrl = "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev";
+
+//Alows dev mode to use a different api version
+//They are currently set to the same as the prod version above.
+if (process.env.REACT_APP_DB === "dev") {
+  checkedInUsersUrl =
+    "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+  checkedOutUsersUrl =
+    "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+  checkInUrl = "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev";
+  checkOutUrl = "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev";
+}
 
 //Get checkinout
 export const getCheckInOut = tokenStr => dispatch => {
@@ -15,21 +32,19 @@ export const getCheckInOut = tokenStr => dispatch => {
   axios
     .all([
       axios.get(
-        'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*',
+        checkedInUsersUrl,
+        //"https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*",
         {
           headers: {
             Authorization: `Bearer ${tokenStr}`
           }
         }
       ),
-      axios.get(
-        'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*',
-        {
-          headers: {
-            Authorization: `Bearer ${tokenStr}`
-          }
+      axios.get(checkedOutUsersUrl, {
+        headers: {
+          Authorization: `Bearer ${tokenStr}`
         }
-      )
+      })
     ])
     .then(
       axios.spread((checkInResponse, checkOutResponse) => {
@@ -54,7 +69,7 @@ export const getCheckInOut = tokenStr => dispatch => {
 export const checkIn = (workerCheckIn, tokenStr) => dispatch => {
   axios
     .put(
-      'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev',
+      checkInUrl,
       workerCheckIn //,
       // {
       //   headers: {
@@ -80,7 +95,7 @@ export const checkIn = (workerCheckIn, tokenStr) => dispatch => {
 export const checkOut = (workerCheckOut, tokenStr) => dispatch => {
   axios
     .put(
-      'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev',
+      checkOutUrl,
       workerCheckOut //,
       // {
       //   headers: {
