@@ -33,7 +33,7 @@ const Counter = props => {
 };
 
 Counter.propTypes = {
-  countValue: PropTypes.string.isRequired
+  countValue: PropTypes.number.isRequired
 };
 
 export default Counter;

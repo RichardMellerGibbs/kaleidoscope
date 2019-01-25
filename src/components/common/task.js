@@ -33,7 +33,7 @@ const Task = props => {
 };
 
 Task.propTypes = {
-  taskIndex: PropTypes.string.isRequired,
+  taskIndex: PropTypes.number.isRequired,
   task: PropTypes.object.isRequired,
   fontSize: PropTypes.string.isRequired,
   display: PropTypes.string.isRequired

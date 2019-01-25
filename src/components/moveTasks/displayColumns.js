@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { DragDropContext } from "react-beautiful-dnd";
-import sortTasks from "../../common/sortTasks";
-import Column from "./column";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
+import sortTasks from '../../common/sortTasks';
+import Column from '../common/column';
+import styled from 'styled-components';
 
 import {
   moveGenericTask,
   moveToUserTask,
   moveFromUserTask
-} from "../../actions/moveActions";
+} from '../../actions/moveActions';
 
 const Container = styled.div`
   margin-top: 20px;
@@ -143,10 +143,10 @@ class DisplayColumns extends Component {
     if (updatesAllowed) {
       //call endpoint api to update
 
-      let taskMove = "";
+      let taskMove = '';
 
       //if moving to user
-      if (finish.id === "USER") {
+      if (finish.id === 'USER') {
         taskMove = {
           reference: this.props.employee,
           spoolDetail: {
@@ -158,7 +158,7 @@ class DisplayColumns extends Component {
         };
 
         this.props.moveToUserTask(taskMove, jwtToken, moveInstruction);
-      } else if (start.id === "USER") {
+      } else if (start.id === 'USER') {
         taskMove = {
           employeeRef: this.props.employee,
           spoolRef: draggableId,
@@ -191,7 +191,15 @@ class DisplayColumns extends Component {
     let mainContent = this.state.columnOrder.map(columnId => {
       const column = this.state.columns[columnId];
       const tasks = column.taskIds.map(taskId => this.state.tasks[taskId]);
-      return <Column key={column.id} column={column} tasks={tasks} />;
+      return (
+        <Column
+          key={column.id}
+          column={column}
+          tasks={tasks}
+          fontSize="110%"
+          colWidth="300px" //was 200
+        />
+      );
     });
 
     return (

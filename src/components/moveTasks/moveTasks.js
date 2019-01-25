@@ -1,21 +1,22 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import Spinner from "../../common/spinner";
-import { getUsersAndGenericTasks } from "../../actions/moveActions";
-import DisplayColumns from "./displayColumns";
-import sortTasks from "./sortTasks";
-import sortUsers from "./sortUsers";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import Spinner from '../../common/spinner';
+import { getUsersAndGenericTasks } from '../../actions/moveActions';
+import DisplayColumns from './displayColumns';
+import sortTasks from './sortTasks';
+import sortUsers from './sortUsers';
 
 const DropDownList = styled.div`
   font-size: 140%;
 `;
 
+//width was 210
 const ColDropDownList = styled.select`
   font-size: 140%;
-  width: 210px;
+  width: 300px;
 `;
 
 const ClearName = styled.button`
@@ -34,7 +35,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const INITIAL = "initial";
+const INITIAL = 'initial';
 
 class MoveTasks extends Component {
   constructor(props) {
@@ -44,9 +45,9 @@ class MoveTasks extends Component {
       tasks: {},
       columns: {},
       columnOrder: [],
-      employee: "initial",
-      leftColItem: "initial",
-      rightColItem: "initial"
+      employee: 'initial',
+      leftColItem: 'initial',
+      rightColItem: 'initial'
     };
   }
 
@@ -90,7 +91,7 @@ class MoveTasks extends Component {
     let newActiveUsers = [...this.state.activeUsers];
 
     //If from a user then remove the task from the activeUsers list
-    if (move.fromCol === "USER") {
+    if (move.fromCol === 'USER') {
       for (let user of newActiveUsers) {
         if (user.reference === this.state.employee) {
           for (let i = 0; i < user.spools.length; i++) {
@@ -104,12 +105,12 @@ class MoveTasks extends Component {
       }
     }
     //If to a user then add the task to the activeUsers list
-    if (move.toCol === "USER") {
+    if (move.toCol === 'USER') {
       for (let i = 0; i < newActiveUsers.length; i++) {
         if (newActiveUsers[i].reference === this.state.employee) {
           newActiveUsers[i].spools.push({
             Activity: this.state.tasks[move.taskId].spoolName,
-            EndDate: "None",
+            EndDate: 'None',
             Spool: this.state.tasks[move.taskId].id,
             StartDate: this.state.tasks[move.taskId].startDate,
             spoolName: this.state.tasks[move.taskId].spoolName
@@ -134,8 +135,8 @@ class MoveTasks extends Component {
     this.setState({
       ...this.state,
       employee: INITIAL,
-      leftColItem: "initial",
-      rightColItem: "initial"
+      leftColItem: 'initial',
+      rightColItem: 'initial'
     });
   };
 
@@ -144,9 +145,9 @@ class MoveTasks extends Component {
     let newColOrder = [...this.state.columnOrder];
 
     //Remove user from left col if it is present
-    delete newCols["USER"];
+    delete newCols['USER'];
 
-    var index = newColOrder.indexOf("USER");
+    var index = newColOrder.indexOf('USER');
     if (index > -1) {
       newColOrder.splice(index, 1);
     }
@@ -172,7 +173,7 @@ class MoveTasks extends Component {
     let newColumns = { ...this.state.columns };
     let newColumnOrder = [...this.state.columnOrder];
 
-    let userSpools = "";
+    let userSpools = '';
     for (let user of this.state.activeUsers) {
       if (user.reference === employee) {
         userSpools = user.spools;
@@ -181,14 +182,14 @@ class MoveTasks extends Component {
     }
 
     //Delete the old users tasks from the pool
-    if (this.state.columns["USER"]) {
-      for (let task of this.state.columns["USER"].taskIds) {
+    if (this.state.columns['USER']) {
+      for (let task of this.state.columns['USER'].taskIds) {
         delete newTasks[task];
       }
     }
 
     //and from the columns
-    delete newColumns["USER"];
+    delete newColumns['USER'];
 
     //Add the newly selected users task data
     if (userSpools.length > 0) {
@@ -203,22 +204,22 @@ class MoveTasks extends Component {
     }
 
     //Now add the column data
-    newColumns["USER"] = {
-      id: "USER",
-      title: "My Tasks",
+    newColumns['USER'] = {
+      id: 'USER',
+      title: 'My Tasks',
       taskIds: userSpools.map(spool => {
         return spool.Spool;
       })
     };
 
     //Add the USER column if necessary
-    if (newColumnOrder[0] !== "USER") {
-      newColumnOrder.unshift("USER");
+    if (newColumnOrder[0] !== 'USER') {
+      newColumnOrder.unshift('USER');
     }
 
     //pre-pop right col with first item to allow columns to render
     let newRightColItem = this.state.rightColItem;
-    if (newRightColItem === "initial") {
+    if (newRightColItem === 'initial') {
       newRightColItem = newColumnOrder[1];
     }
 
@@ -227,7 +228,7 @@ class MoveTasks extends Component {
       tasks: newTasks,
       columns: newColumns,
       columnOrder: newColumnOrder,
-      leftColItem: "USER",
+      leftColItem: 'USER',
       rightColItem: newRightColItem,
       employee: employee
     });
@@ -242,12 +243,12 @@ class MoveTasks extends Component {
 
     const { loading } = this.props.moveTasks;
 
-    let userItems = "";
-    let userContent = ""; //UserDropdown list
-    let columnPickers = ""; //Column Dropdown pickers
-    let leftColItems = "";
-    let rightColItems = "";
-    let columnsContent = "";
+    let userItems = '';
+    let userContent = ''; //UserDropdown list
+    let columnPickers = ''; //Column Dropdown pickers
+    let leftColItems = '';
+    let rightColItems = '';
+    let columnsContent = '';
 
     if (loading) {
       userContent = <Spinner />;
@@ -263,8 +264,8 @@ class MoveTasks extends Component {
 
         if (users[0].reference !== INITIAL) {
           users.unshift({
-            name: "Please select your name",
-            reference: "initial"
+            name: 'Please select your name',
+            reference: 'initial'
           });
         }
 
@@ -308,13 +309,13 @@ class MoveTasks extends Component {
               </option>
             );
           } else {
-            if (col.reference === "USER" && columnId === "right") {
+            if (col.reference === 'USER' && columnId === 'right') {
               return null;
             }
             if (
-              (columnId === "left" &&
+              (columnId === 'left' &&
                 col.reference === this.state.rightColItem) ||
-              (columnId === "right" && col.reference === this.state.leftColItem)
+              (columnId === 'right' && col.reference === this.state.leftColItem)
             ) {
               return (
                 <option disabled value={col.reference} key={col.reference}>
@@ -338,10 +339,10 @@ class MoveTasks extends Component {
         if (Object.keys(this.state.columns).length === 0) return;
 
         let columnList = this.state.columnOrder.map(col => {
-          if (col === "USER") {
+          if (col === 'USER') {
             return {
               reference: col,
-              name: "My Tasks"
+              name: 'My Tasks'
             };
           } else {
             return {
@@ -353,13 +354,13 @@ class MoveTasks extends Component {
 
         if (columnList[0].reference !== INITIAL) {
           columnList.unshift({
-            name: "Select location",
-            reference: "initial"
+            name: 'Select location',
+            reference: 'initial'
           });
         }
 
-        leftColItems = buildColList(columnList, "left");
-        rightColItems = buildColList(columnList, "right");
+        leftColItems = buildColList(columnList, 'left');
+        rightColItems = buildColList(columnList, 'right');
 
         //Prepare column pickers
         columnPickers = (

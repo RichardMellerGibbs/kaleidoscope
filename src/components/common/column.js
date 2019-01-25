@@ -8,10 +8,12 @@ const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 300px;
   display: flex;
   flex-direction: column;
+  width: ${props => props.colWidth};
 `;
+//width 200 for move and 300 for entry
+//width: ${props => props.width};
 const Title = styled.h3`
   padding: 8px;
   background-color: ${props =>
@@ -30,7 +32,7 @@ const TaskList = styled.div`
 
 const Column = props => {
   return (
-    <Container>
+    <Container colWidth={props.colWidth}>
       <Title checkedInTitle={props.column.title === 'Checked In'}>
         {props.column.title}
       </Title>
@@ -41,13 +43,14 @@ const Column = props => {
             {...provided.droppableProps}
             isDraggingOver={snapshot.isDraggingOver}
           >
+            {/* fontsize 110% task and 130% entry */}
             {props.tasks.map((task, index) => (
               <Task
                 key={task.id}
                 task={task}
                 taskIndex={index}
-                fontSize={'130%'}
-                display={task.forename + ' ' + task.surname}
+                fontSize={props.fontSize}
+                display={task.id + ': ' + task.spoolName}
               />
             ))}
             {provided.placeholder}
@@ -60,7 +63,7 @@ const Column = props => {
 
 Column.propTypes = {
   column: PropTypes.object.isRequired,
-  tasks: PropTypes.object.isRequired
+  tasks: PropTypes.array.isRequired
 };
 
 export default Column;
