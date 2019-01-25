@@ -12,7 +12,7 @@ import {
 } from '../../actions/checkInOutActions';
 //import initialData from './components/entryExit/data';
 //import testData from './components/entryExit/testData';
-import Column from './column';
+import Column from '../common/column';
 import Counter from './counter';
 import sortTasks from '../../common/sortTasks';
 import Spinner from '../../common/spinner';
@@ -192,7 +192,15 @@ class EntryExit extends Component {
         if (columnId === 'checkedIn') checkedInCount = tasks.length;
         if (columnId === 'checkedOut') checkedOutCount = tasks.length;
 
-        return <Column key={column.id} column={column} tasks={tasks} />;
+        return (
+          <Column
+            key={column.id}
+            column={column}
+            tasks={tasks}
+            fontSize="130%"
+            colWidth="300px"
+          />
+        );
       });
 
       if (checkedInCount === 0 && checkedOutCount !== 0)
