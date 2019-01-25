@@ -1,12 +1,12 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import thunk from "redux-thunk";
-import rootReducer from "./reducers";
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers';
 
 const initialState = {};
 const middleWare = [thunk];
-let store = "";
+let store = '';
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   store = createStore(
     rootReducer,
     initialState,

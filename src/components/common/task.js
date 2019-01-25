@@ -1,14 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import { Draggable } from "react-beautiful-dnd";
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { Draggable } from 'react-beautiful-dnd';
 
 const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 2px;
   padding: 8px;
   margin-bottom: 8px;
-  background-color: ${props => (props.isDragging ? "lightgreen" : "white")};
+  background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
   border-radius: 5px;
   height: 80px;
   font-size: ${props => props.fontSize};

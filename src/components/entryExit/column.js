@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
-import { Droppable } from "react-beautiful-dnd";
-import Task from "../common/task";
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { Droppable } from 'react-beautiful-dnd';
+import Task from '../common/task';
 
 const Container = styled.div`
   margin: 8px;
@@ -15,7 +15,7 @@ const Container = styled.div`
 const Title = styled.h3`
   padding: 8px;
   background-color: ${props =>
-    props.checkedInTitle ? "rgb(59, 88, 99)" : "rgb(135, 180, 197)"};
+    props.checkedInTitle ? 'rgb(59, 88, 99)' : 'rgb(135, 180, 197)'};
   color: #fff;
   font-weight: 400;
 `;
@@ -23,7 +23,7 @@ const TaskList = styled.div`
   padding: 8px;
   transition: baackground-color 0.2s ease;
   background-color: ${props =>
-    props.isDraggingOver ? "skyblue" : "rgb(224, 221, 221)"};
+    props.isDraggingOver ? 'skyblue' : 'rgb(224, 221, 221)'};
   flex-grow: 1;
   min-height: 100px;
 `;
@@ -31,7 +31,7 @@ const TaskList = styled.div`
 const Column = props => {
   return (
     <Container>
-      <Title checkedInTitle={props.column.title === "Checked In"}>
+      <Title checkedInTitle={props.column.title === 'Checked In'}>
         {props.column.title}
       </Title>
       <Droppable droppableId={props.column.id}>
@@ -46,8 +46,8 @@ const Column = props => {
                 key={task.id}
                 task={task}
                 taskIndex={index}
-                fontSize={"130%"}
-                display={task.forename + " " + task.surname}
+                fontSize={'130%'}
+                display={task.forename + ' ' + task.surname}
               />
             ))}
             {provided.placeholder}

@@ -1,29 +1,29 @@
-import axios from "axios";
+import axios from 'axios';
 
 import {
   GET_CHECKINOUT,
   PUT_CHECKINOUT,
   CHECKINOUT_LOADING,
   GET_ERRORS
-} from "./types";
+} from './types';
 
 //Prod versions
 let checkedInUsersUrl =
-  "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+  'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
 let checkedOutUsersUrl =
-  "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
-let checkInUrl = "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev";
-let checkOutUrl = "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev";
+  'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
+let checkInUrl = 'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev';
+let checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev';
 
 //Alows dev mode to use a different api version
 //They are currently set to the same as the prod version above.
-if (process.env.REACT_APP_DB === "dev") {
+if (process.env.REACT_APP_DB === 'dev') {
   checkedInUsersUrl =
-    "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
+    'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
   checkedOutUsersUrl =
-    "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*";
-  checkInUrl = "https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev";
-  checkOutUrl = "https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev";
+    'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
+  checkInUrl = 'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev';
+  checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev';
 }
 
 //Get checkinout
