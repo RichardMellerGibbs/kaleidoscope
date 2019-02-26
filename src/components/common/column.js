@@ -50,7 +50,11 @@ const Column = props => {
                 task={task}
                 taskIndex={index}
                 fontSize={props.fontSize}
-                display={task.id + ': ' + task.spoolName}
+                display={
+                  task.spoolName
+                    ? task.id + ': ' + task.spoolName
+                    : task.forename + ' ' + task.surname
+                }
               />
             ))}
             {provided.placeholder}
