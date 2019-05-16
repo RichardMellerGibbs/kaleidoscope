@@ -132,12 +132,26 @@ class MoveTasks extends Component {
   };
 
   clearName = e => {
-    this.setState({
-      ...this.state,
-      employee: INITIAL,
-      leftColItem: 'initial',
-      rightColItem: 'initial'
-    });
+    this.setState(
+      {
+        ...this.state,
+        activeUsers: [],
+        tasks: {},
+        columns: {},
+        columnOrder: [],
+        employee: 'initial',
+        leftColItem: 'initial',
+        rightColItem: 'initial'
+      },
+      function() {
+        const { user, isAuthenticated } = this.props.auth;
+
+        if (isAuthenticated) {
+          const jwtToken = user.signInUserSession.idToken.jwtToken;
+          this.props.getUsersAndGenericTasks(jwtToken);
+        }
+      }
+    );
   };
 
   leftColSelected = e => {
@@ -389,7 +403,6 @@ class MoveTasks extends Component {
         this.state.rightColItem !== INITIAL
       ) {
         const columns = [this.state.leftColItem, this.state.rightColItem];
-
         columnsContent = (
           <DisplayColumns
             cols={columns}
