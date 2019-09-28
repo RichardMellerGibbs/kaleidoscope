@@ -19,8 +19,19 @@ const ColDropDownList = styled.select`
   width: 300px;
 `;
 
+const InputField = styled.input`
+  width: 250px;
+  height: 26px;
+`;
+
+const SelectField = styled.select`
+  width: 250px;
+  height: 26px;
+`;
+
 const ClearName = styled.button`
   margin-left: 10px;
+  width: 60px;
 `;
 
 const EmployeeList = styled.div`
@@ -47,7 +58,9 @@ class MoveTasks extends Component {
       columnOrder: [],
       employee: 'initial',
       leftColItem: 'initial',
-      rightColItem: 'initial'
+      rightColItem: 'initial',
+      searchField: false,
+      searchValue: ''
     };
   }
 
@@ -128,7 +141,8 @@ class MoveTasks extends Component {
   };
 
   userSelected = e => {
-    this.addUserToLeftCol(e.target.value);
+    const searchField = true;
+    this.addUserToLeftCol(e.target.value, searchField);
   };
 
   clearName = e => {
@@ -141,7 +155,8 @@ class MoveTasks extends Component {
         columnOrder: [],
         employee: 'initial',
         leftColItem: 'initial',
-        rightColItem: 'initial'
+        rightColItem: 'initial',
+        searchField: false
       },
       function() {
         const { user, isAuthenticated } = this.props.auth;
@@ -152,6 +167,16 @@ class MoveTasks extends Component {
         }
       }
     );
+  };
+
+  searchTasks = e => {
+    console.log(`searching for tasks activated for ${this.state.searchValue}`);
+  };
+
+  updateSearchValue = e => {
+    this.setState({
+      searchValue: e.target.value
+    });
   };
 
   leftColSelected = e => {
@@ -182,7 +207,7 @@ class MoveTasks extends Component {
     });
   };
 
-  addUserToLeftCol(employee) {
+  addUserToLeftCol(employee, searchField) {
     let newTasks = { ...this.state.tasks };
     let newColumns = { ...this.state.columns };
     let newColumnOrder = [...this.state.columnOrder];
@@ -244,12 +269,17 @@ class MoveTasks extends Component {
       columnOrder: newColumnOrder,
       leftColItem: 'USER',
       rightColItem: newRightColItem,
-      employee: employee
+      employee: employee,
+      searchField: searchField
     });
   }
 
   render() {
     const { isAuthenticated } = this.props.auth;
+
+    if (this.state.tasks) {
+      console.log(`tasks = ${JSON.stringify(this.state.tasks['9861'])}`);
+    }
 
     if (!isAuthenticated) {
       return <Redirect to="/login" />;
@@ -263,6 +293,7 @@ class MoveTasks extends Component {
     let leftColItems = '';
     let rightColItems = '';
     let columnsContent = '';
+    let searchOption = '';
 
     if (loading) {
       userContent = <Spinner />;
@@ -301,9 +332,12 @@ class MoveTasks extends Component {
 
         userContent = (
           <DropDownList>
-            <select value={this.state.employee} onChange={this.userSelected}>
+            <SelectField
+              value={this.state.employee}
+              onChange={this.userSelected}
+            >
               {userItems}
-            </select>
+            </SelectField>
             <ClearName
               className="btn btn-sm btn-primary"
               onClick={this.clearName}
@@ -413,11 +447,33 @@ class MoveTasks extends Component {
           />
         );
       }
+
+      if (this.state.searchField) {
+        searchOption = (
+          <EmployeeList>
+            <DropDownList>
+              <InputField
+                placeholder="Task Search"
+                onChange={evt => this.updateSearchValue(evt)}
+              ></InputField>
+              <ClearName
+                className="btn btn-sm btn-primary"
+                onClick={this.searchTasks}
+              >
+                Search
+              </ClearName>
+            </DropDownList>
+          </EmployeeList>
+        );
+      } else {
+        searchOption = null;
+      }
     }
 
     return (
       <div>
         <EmployeeList>{userContent}</EmployeeList>
+        {searchOption}
         <div className="row">{columnPickers}</div>
         {columnsContent}
       </div>
