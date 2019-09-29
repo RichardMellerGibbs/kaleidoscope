@@ -9,12 +9,36 @@ import {
   PUT_MOVESPOOL
 } from './types';
 
+//Prod Versions
+let getActiveUsersUrl =
+  'https://cvskwag0kl.execute-api.eu-west-2.amazonaws.com/prod?postId=*';
+let getGenericSpoolsUrl =
+  'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/prod?spoolId=*';
+let moveSpoolUrl =
+  'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/prod';
+let moveSpoolToUserUrl =
+  'https://3tn3vh0ze6.execute-api.eu-west-2.amazonaws.com/prod';
+let moveFromUserSpoolUrl =
+  'https://gw9owr65wi.execute-api.eu-west-2.amazonaws.com/prod';
+
+if (process.env.REACT_APP_ENV === 'dev') {
+  getActiveUsersUrl =
+    'https://cvskwag0kl.execute-api.eu-west-2.amazonaws.com/dev?postId=*';
+  getGenericSpoolsUrl =
+    'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/dev?spoolId=*';
+  moveSpoolUrl = 'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/dev';
+  moveSpoolToUserUrl =
+    'https://3tn3vh0ze6.execute-api.eu-west-2.amazonaws.com/dev';
+  moveFromUserSpoolUrl =
+    'https://gw9owr65wi.execute-api.eu-west-2.amazonaws.com/dev';
+}
+
 //Get active users
 export const getActiveUsers = tokenStr => dispatch => {
   dispatch(setActiveUserLoading());
   axios
     .get(
-      'https://cvskwag0kl.execute-api.eu-west-2.amazonaws.com/prod?postId=*'
+      getActiveUsersUrl
       // {
       //   headers: {
       //     Authorization: `Bearer ${tokenStr}`
@@ -40,7 +64,7 @@ export const getGenericSpools = tokenStr => dispatch => {
   dispatch(setGenericSpoolLoading());
   axios
     .get(
-      'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/prod?spoolId=*'
+      getGenericSpoolsUrl
       // {
       //   headers: {
       //     Authorization: `Bearer ${tokenStr}`
@@ -65,7 +89,7 @@ export const getGenericSpools = tokenStr => dispatch => {
 export const moveSpool = (taskMove, tokenStr) => dispatch => {
   axios
     .post(
-      'https://73fakm0vqc.execute-api.eu-west-2.amazonaws.com/prod',
+      moveSpoolUrl,
       taskMove //,
       // {
       //   headers: {
@@ -91,7 +115,7 @@ export const moveSpool = (taskMove, tokenStr) => dispatch => {
 export const moveToUserSpool = (taskMove, tokenStr) => dispatch => {
   axios
     .post(
-      'https://3tn3vh0ze6.execute-api.eu-west-2.amazonaws.com/prod',
+      moveSpoolToUserUrl,
       taskMove //,
       // {
       //   headers: {
@@ -117,7 +141,7 @@ export const moveToUserSpool = (taskMove, tokenStr) => dispatch => {
 export const moveFromUserSpool = (taskMove, tokenStr) => dispatch => {
   axios
     .post(
-      'https://gw9owr65wi.execute-api.eu-west-2.amazonaws.com/prod',
+      moveFromUserSpoolUrl,
       taskMove //,
       // {
       //   headers: {

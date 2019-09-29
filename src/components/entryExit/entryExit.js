@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,7 +16,7 @@ import Column from '../common/column';
 import Counter from './counter';
 import sortTasks from '../../common/sortTasks';
 import Spinner from '../../common/spinner';
-//import { signUp, verifySignUp } from '../../common/manSignUp';
+import { signUp, verifySignUp } from '../../common/manSignUp';
 
 const Container = styled.div`
   display: flex;
@@ -43,13 +43,13 @@ class EntryExit extends Component {
     }
   }
 
-  // manSignUp = () => {
-  //   signUp();
-  // };
+  manSignUp = () => {
+    signUp();
+  };
 
-  // verifySignUp = () => {
-  //   verifySignUp();
-  // };
+  verifySignUp = () => {
+    verifySignUp();
+  };
 
   onDragEnd = result => {
     const { destination, source, draggableId } = result;
@@ -181,6 +181,9 @@ class EntryExit extends Component {
     let content;
     let checkedInCount = 0;
     let checkedOutCount = 0;
+    let signUp;
+
+    const mode = process.env.REACT_APP_ENV === 'dev' ? 'dev_mode' : null;
 
     if (this.state.columnOrder.length === 0 || loading) {
       content = <Spinner />;
@@ -212,11 +215,26 @@ class EntryExit extends Component {
         innerContent,
         <Counter countValue={checkedInCount} key="1" />
       ];
+
+      if (process.env.REACT_APP_ENV === 'dev') {
+        signUp = (
+          <Fragment>
+            <button className="btn btn-primary" onClick={this.manSignUp}>
+              Man Sign Up
+            </button>
+            <button className="btn btn-primary" onClick={this.verifySignUp}>
+              Verify
+            </button>
+          </Fragment>
+        );
+      }
     }
 
     return (
       <div className="container">
         <div className="row">
+          {mode}
+          {signUp}
           {/* <button className="btn btn-primary" onClick={this.manSignUp}>
             Man Sign Up
           </button>

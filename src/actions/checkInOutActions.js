@@ -9,15 +9,15 @@ import {
 
 //Prod versions
 let checkedInUsersUrl =
-  'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
+  'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/prod?WorkerRef=*';
 let checkedOutUsersUrl =
-  'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
-let checkInUrl = 'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev';
-let checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev';
+  'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/prod?WorkerRef=*';
+let checkInUrl = 'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/prod';
+let checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/prod';
 
 //Alows dev mode to use a different api version
 //They are currently set to the same as the prod version above.
-if (process.env.REACT_APP_DB === 'dev') {
+if (process.env.REACT_APP_ENV === 'dev') {
   checkedInUsersUrl =
     'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev?WorkerRef=*';
   checkedOutUsersUrl =
@@ -25,6 +25,8 @@ if (process.env.REACT_APP_DB === 'dev') {
   checkInUrl = 'https://6sm7s3jxfd.execute-api.eu-west-2.amazonaws.com/dev';
   checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev';
 }
+
+console.log(`checkedout url = ${checkedOutUsersUrl}`);
 
 //Get checkinout
 export const getCheckInOut = tokenStr => dispatch => {
