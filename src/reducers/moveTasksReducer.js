@@ -1,7 +1,7 @@
 import {
   GET_GENERIC_TASKS,
   GET_USERS_AND_TASKS_LOADING
-} from "../actions/types";
+} from '../actions/types';
 
 const initialState = {
   activeUsers: [],
@@ -33,7 +33,7 @@ export default function(state = initialState, action) {
   }
 }
 
-const prepData = payload => {
+export const prepData = payload => {
   let tasks = {};
   let columns = {};
   let columnOrder = [];

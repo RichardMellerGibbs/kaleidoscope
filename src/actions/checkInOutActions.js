@@ -26,8 +26,6 @@ if (process.env.REACT_APP_ENV === 'dev') {
   checkOutUrl = 'https://5yspssp9j7.execute-api.eu-west-2.amazonaws.com/dev';
 }
 
-console.log(`checkedout url = ${checkedOutUsersUrl}`);
-
 //Get checkinout
 export const getCheckInOut = tokenStr => dispatch => {
   dispatch(setCheckInOutLoading());

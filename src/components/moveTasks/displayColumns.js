@@ -51,7 +51,7 @@ class DisplayColumns extends Component {
     }
   }
 
-  onDragEnd = result => {
+  onDragEnd = async result => {
     const { destination, source, draggableId } = result;
 
     if (!destination) {
@@ -91,8 +91,8 @@ class DisplayColumns extends Component {
     }
 
     //Moving from one column to another
-    const { user } = this.props.auth;
-    const jwtToken = user.signInUserSession.idToken.jwtToken;
+    // const { user } = this.props.auth;
+    // const jwtToken = user.signInUserSession.idToken.jwtToken;
 
     let startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
@@ -126,14 +126,14 @@ class DisplayColumns extends Component {
     };
 
     //Needed to update activeUsers in moveTasks
-    const moveInstruction = {
-      fromCol: start.id,
-      toCol: finish.id,
-      taskId: draggableId
-    };
+    // const moveInstruction = {
+    //   fromCol: start.id,
+    //   toCol: finish.id,
+    //   taskId: draggableId
+    // };
 
-    //Passing columns state back to parent to keep it's state upto date
-    this.props.disColTaskMoved(newColumns, moveInstruction);
+    // //Passing columns state back to parent to keep it's state upto date
+    // this.props.disColTaskMoved(newColumns, moveInstruction);
 
     this.setState(newState);
 
@@ -157,7 +157,24 @@ class DisplayColumns extends Component {
           }
         };
 
-        this.props.moveToUserTask(taskMove, jwtToken, moveInstruction);
+        // this.props.moveToUserTask(taskMove, jwtToken, moveInstruction);
+        // await axios
+        //   .post(
+        //     'https://3tn3vh0ze6.execute-api.eu-west-2.amazonaws.com/dev',
+        //     taskMove
+        //   )
+        //   .catch(err =>
+        //     console.log(`Error when moving to user ${err.toString()}`)
+        //   );
+
+        //Passing columns state back to parent to keep it's state upto date
+        // this.props.disColTaskMoved(newColumns, moveInstruction);
+        this.props.disColTaskMoved(
+          // newColumns,
+          // moveInstruction,
+          taskMove,
+          'TO USER'
+        );
       } else if (start.id === 'USER') {
         taskMove = {
           employeeRef: this.props.employee,
@@ -167,7 +184,22 @@ class DisplayColumns extends Component {
           StartDate: timeNow
         };
 
-        this.props.moveFromUserTask(taskMove, jwtToken, moveInstruction);
+        // await axios
+        //   .post(
+        //     'https://gw9owr65wi.execute-api.eu-west-2.amazonaws.com/dev',
+        //     taskMove
+        //   )
+        //   .catch(err =>
+        //     console.log(`Error when moving to user ${err.toString()}`)
+        //   );
+        //Passing columns state back to parent to keep it's state upto date
+        this.props.disColTaskMoved(
+          // newColumns,
+          // moveInstruction,
+          taskMove,
+          'FROM USER'
+        );
+        // this.props.moveFromUserTask(taskMove, jwtToken, moveInstruction);
       } else {
         taskMove = {
           spoolRef: draggableId,
@@ -176,7 +208,20 @@ class DisplayColumns extends Component {
           StartDate: timeNow
         };
 
-        this.props.moveGenericTask(taskMove, jwtToken, moveInstruction);
+        // this.props.moveGenericTask(
+        //   taskMove,
+        //   jwtToken,
+        //   moveInstruction,
+        //   taskMove,
+        //   'GENERIC'
+        // );
+
+        this.props.disColTaskMoved(
+          // newColumns,
+          // moveInstruction,
+          taskMove,
+          'GENERIC'
+        );
       }
     }
   };
@@ -188,9 +233,25 @@ class DisplayColumns extends Component {
       return <Redirect to="/login" />;
     }
 
+    // console.log(
+    //   `this.state.columnOrder = ${JSON.stringify(this.state.columnOrder)}`
+    // );
+
     let mainContent = this.state.columnOrder.map(columnId => {
+      //  console.log(`columnId = ${columnId}`);
+      // console.log(
+      //   `this.state.columns[columnId] = ${JSON.stringify(
+      //     this.state.columns[columnId]
+      //   )}`
+      // );
+      // console.log(`this.state.columns = ${JSON.stringify(this.state.columns)}`);
+
       const column = this.state.columns[columnId];
+      // console.log(`column = ${JSON.stringify(column)}`);
+      // console.log(`this.state.tasks = ${JSON.stringify(this.state.tasks)}`);
       const tasks = column.taskIds.map(taskId => this.state.tasks[taskId]);
+      // console.log(`tasks in dispcols = ${JSON.stringify(tasks)}`);
+
       return (
         <Column
           key={column.id}
