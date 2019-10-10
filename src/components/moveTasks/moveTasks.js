@@ -87,7 +87,6 @@ class MoveTasks extends Component {
       const jwtToken = user.signInUserSession.idToken.jwtToken;
       this.props.getUsersAndGenericTasks(jwtToken);
     }
-    // this.serverRefresh();
   }
 
   preparePropState = data => {
@@ -159,7 +158,18 @@ class MoveTasks extends Component {
         newRightColItem = newColumnOrder[1];
       }
 
-      this.setState({
+      // this.setState({
+      //   activeUsers: sortedActiveUsers,
+      //   tasks: newTasks,
+      //   columns: newColumns,
+      //   columnOrder: newColumnOrder,
+      //   leftColItem: 'USER',
+      //   rightColItem: newRightColItem,
+      //   employee: employee
+      // });
+      // return;
+
+      return {
         activeUsers: sortedActiveUsers,
         tasks: newTasks,
         columns: newColumns,
@@ -167,16 +177,22 @@ class MoveTasks extends Component {
         leftColItem: 'USER',
         rightColItem: newRightColItem,
         employee: employee
-      });
-      return;
+      };
     }
 
-    this.setState({
+    return {
       activeUsers: sortedActiveUsers,
       tasks: data.genericTasks.tasks,
       columns: data.genericTasks.columns,
       columnOrder: sortedColumnItems
-    });
+    };
+
+    // this.setState({
+    //   activeUsers: sortedActiveUsers,
+    //   tasks: data.genericTasks.tasks,
+    //   columns: data.genericTasks.columns,
+    //   columnOrder: sortedColumnItems
+    // });
   };
 
   componentWillReceiveProps(nextProps) {
@@ -186,7 +202,14 @@ class MoveTasks extends Component {
       if (!data.genericTasks.columnOrder) {
         return;
       }
-      this.preparePropState(data);
+      const result = this.preparePropState(data);
+
+      this.setState({
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder
+      });
     }
   }
 
@@ -216,14 +239,34 @@ class MoveTasks extends Component {
         );
     }
 
-    this.serverRefresh();
+    const result = await this.serverRefresh();
 
-    this.setState({
-      overlay: false,
-      searchValue: '',
-      disableResetSearchBtn: true,
-      disableSearchBtn: true
-    });
+    if (result.leftColItem && result.leftColItem === 'USER') {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder,
+        leftColItem: result.leftColItem,
+        rightColItem: result.rightColItem,
+        employee: result.employee
+      });
+    } else {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder
+      });
+    }
 
     // const { user, isAuthenticated } = this.props.auth;
 
@@ -235,6 +278,7 @@ class MoveTasks extends Component {
 
   serverRefresh = async () => {
     // Get a fresh copy of activeusers and tasks
+    let response;
     await axios
       .all([axios.get(getUsersUrl), axios.get(getTasksUrl)])
       .then(
@@ -257,12 +301,14 @@ class MoveTasks extends Component {
             activeUsers: payload.activeUsers.data,
             moveInstruction: {}
           };
-          this.preparePropState(data);
+          response = this.preparePropState(data);
         })
       )
       .catch(err =>
         console.log(`error when getting users and tasks err ${err.toString()}`)
       );
+
+    return response;
   };
 
   selectUser = (user, isolatedTaskInUsers = null) => {
@@ -307,14 +353,43 @@ class MoveTasks extends Component {
       overlay: true
     });
 
-    await this.serverRefresh();
+    // await this.serverRefresh();
 
-    this.setState({
-      disableResetSearchBtn: true,
-      overlay: false,
-      searchValue: '',
-      disableSearchBtn: true
-    });
+    const result = await this.serverRefresh();
+
+    if (result.leftColItem && result.leftColItem === 'USER') {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder,
+        leftColItem: result.leftColItem,
+        rightColItem: result.rightColItem,
+        employee: result.employee
+      });
+    } else {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder
+      });
+    }
+
+    // this.setState({
+    //   disableResetSearchBtn: true,
+    //   overlay: false,
+    //   searchValue: '',
+    //   disableSearchBtn: true
+    // });
   };
 
   searchTasks = e => {
