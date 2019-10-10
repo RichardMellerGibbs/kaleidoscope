@@ -125,16 +125,6 @@ class DisplayColumns extends Component {
       columns: newColumns
     };
 
-    //Needed to update activeUsers in moveTasks
-    // const moveInstruction = {
-    //   fromCol: start.id,
-    //   toCol: finish.id,
-    //   taskId: draggableId
-    // };
-
-    // //Passing columns state back to parent to keep it's state upto date
-    // this.props.disColTaskMoved(newColumns, moveInstruction);
-
     this.setState(newState);
 
     const updatesAllowed = true;
@@ -157,24 +147,9 @@ class DisplayColumns extends Component {
           }
         };
 
-        // this.props.moveToUserTask(taskMove, jwtToken, moveInstruction);
-        // await axios
-        //   .post(
-        //     'https://3tn3vh0ze6.execute-api.eu-west-2.amazonaws.com/dev',
-        //     taskMove
-        //   )
-        //   .catch(err =>
-        //     console.log(`Error when moving to user ${err.toString()}`)
-        //   );
-
         //Passing columns state back to parent to keep it's state upto date
         // this.props.disColTaskMoved(newColumns, moveInstruction);
-        this.props.disColTaskMoved(
-          // newColumns,
-          // moveInstruction,
-          taskMove,
-          'TO USER'
-        );
+        this.props.disColTaskMoved(taskMove, 'TO USER');
       } else if (start.id === 'USER') {
         taskMove = {
           employeeRef: this.props.employee,
@@ -184,21 +159,8 @@ class DisplayColumns extends Component {
           StartDate: timeNow
         };
 
-        // await axios
-        //   .post(
-        //     'https://gw9owr65wi.execute-api.eu-west-2.amazonaws.com/dev',
-        //     taskMove
-        //   )
-        //   .catch(err =>
-        //     console.log(`Error when moving to user ${err.toString()}`)
-        //   );
         //Passing columns state back to parent to keep it's state upto date
-        this.props.disColTaskMoved(
-          // newColumns,
-          // moveInstruction,
-          taskMove,
-          'FROM USER'
-        );
+        this.props.disColTaskMoved(taskMove, 'FROM USER');
         // this.props.moveFromUserTask(taskMove, jwtToken, moveInstruction);
       } else {
         taskMove = {
@@ -208,20 +170,7 @@ class DisplayColumns extends Component {
           StartDate: timeNow
         };
 
-        // this.props.moveGenericTask(
-        //   taskMove,
-        //   jwtToken,
-        //   moveInstruction,
-        //   taskMove,
-        //   'GENERIC'
-        // );
-
-        this.props.disColTaskMoved(
-          // newColumns,
-          // moveInstruction,
-          taskMove,
-          'GENERIC'
-        );
+        this.props.disColTaskMoved(taskMove, 'GENERIC');
       }
     }
   };

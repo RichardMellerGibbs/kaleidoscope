@@ -83,11 +83,11 @@ class MoveTasks extends Component {
 
   componentDidMount() {
     const { user, isAuthenticated } = this.props.auth;
-
     if (isAuthenticated) {
       const jwtToken = user.signInUserSession.idToken.jwtToken;
       this.props.getUsersAndGenericTasks(jwtToken);
     }
+    // this.serverRefresh();
   }
 
   preparePropState = data => {
@@ -95,6 +95,9 @@ class MoveTasks extends Component {
       data.genericTasks.columnOrder,
       data.genericTasks.columns
     );
+
+    // console.log(`data.genericTasks = ${JSON.stringify(data.genericTasks)}`);
+    // console.log(`data.activeUsers = ${JSON.stringify(data.activeUsers)}`);
 
     const sortedActiveUsers = sortUsers(data.activeUsers);
     // console.log(`sortedActiveUsers = ${JSON.stringify(sortedActiveUsers)}`);
@@ -206,7 +209,7 @@ class MoveTasks extends Component {
           console.log(`Error when moving from user ${err.toString()}`)
         );
     } else if (direction === 'GENERIC') {
-      axios
+      await axios
         .post(moveGenericTaskUrl, taskMove)
         .catch(err =>
           console.log(`Error when moving generic task ${err.toString()}`)
@@ -408,11 +411,19 @@ class MoveTasks extends Component {
   };
 
   updateSearchValue = e => {
-    this.setState({
-      searchValue: e.target.value,
-      disableResetSearchBtn: false,
-      disableSearchBtn: false
-    });
+    if (e.target.value === '') {
+      this.setState({
+        searchValue: e.target.value,
+        disableResetSearchBtn: false,
+        disableSearchBtn: true
+      });
+    } else {
+      this.setState({
+        searchValue: e.target.value,
+        disableResetSearchBtn: false,
+        disableSearchBtn: false
+      });
+    }
   };
 
   leftColSelected = e => {
