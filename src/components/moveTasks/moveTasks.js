@@ -95,11 +95,7 @@ class MoveTasks extends Component {
       data.genericTasks.columns
     );
 
-    // console.log(`data.genericTasks = ${JSON.stringify(data.genericTasks)}`);
-    // console.log(`data.activeUsers = ${JSON.stringify(data.activeUsers)}`);
-
     const sortedActiveUsers = sortUsers(data.activeUsers);
-    // console.log(`sortedActiveUsers = ${JSON.stringify(sortedActiveUsers)}`);
     const employee = this.state.employee;
 
     if (employee !== 'initial') {
@@ -158,17 +154,6 @@ class MoveTasks extends Component {
         newRightColItem = newColumnOrder[1];
       }
 
-      // this.setState({
-      //   activeUsers: sortedActiveUsers,
-      //   tasks: newTasks,
-      //   columns: newColumns,
-      //   columnOrder: newColumnOrder,
-      //   leftColItem: 'USER',
-      //   rightColItem: newRightColItem,
-      //   employee: employee
-      // });
-      // return;
-
       return {
         activeUsers: sortedActiveUsers,
         tasks: newTasks,
@@ -186,13 +171,35 @@ class MoveTasks extends Component {
       columns: data.genericTasks.columns,
       columnOrder: sortedColumnItems
     };
+  };
 
-    // this.setState({
-    //   activeUsers: sortedActiveUsers,
-    //   tasks: data.genericTasks.tasks,
-    //   columns: data.genericTasks.columns,
-    //   columnOrder: sortedColumnItems
-    // });
+  setTheState = result => {
+    if (result.leftColItem && result.leftColItem === 'USER') {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder,
+        leftColItem: result.leftColItem,
+        rightColItem: result.rightColItem,
+        employee: result.employee
+      });
+    } else {
+      this.setState({
+        overlay: false,
+        searchValue: '',
+        disableResetSearchBtn: true,
+        disableSearchBtn: true,
+        activeUsers: result.activeUsers,
+        tasks: result.tasks,
+        columns: result.columns,
+        columnOrder: result.columnOrder
+      });
+    }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -203,13 +210,7 @@ class MoveTasks extends Component {
         return;
       }
       const result = this.preparePropState(data);
-
-      this.setState({
-        activeUsers: result.activeUsers,
-        tasks: result.tasks,
-        columns: result.columns,
-        columnOrder: result.columnOrder
-      });
+      this.setTheState(result);
     }
   }
 
@@ -240,33 +241,7 @@ class MoveTasks extends Component {
     }
 
     const result = await this.serverRefresh();
-
-    if (result.leftColItem && result.leftColItem === 'USER') {
-      this.setState({
-        overlay: false,
-        searchValue: '',
-        disableResetSearchBtn: true,
-        disableSearchBtn: true,
-        activeUsers: result.activeUsers,
-        tasks: result.tasks,
-        columns: result.columns,
-        columnOrder: result.columnOrder,
-        leftColItem: result.leftColItem,
-        rightColItem: result.rightColItem,
-        employee: result.employee
-      });
-    } else {
-      this.setState({
-        overlay: false,
-        searchValue: '',
-        disableResetSearchBtn: true,
-        disableSearchBtn: true,
-        activeUsers: result.activeUsers,
-        tasks: result.tasks,
-        columns: result.columns,
-        columnOrder: result.columnOrder
-      });
-    }
+    this.setTheState(result);
 
     // const { user, isAuthenticated } = this.props.auth;
 
@@ -353,43 +328,8 @@ class MoveTasks extends Component {
       overlay: true
     });
 
-    // await this.serverRefresh();
-
     const result = await this.serverRefresh();
-
-    if (result.leftColItem && result.leftColItem === 'USER') {
-      this.setState({
-        overlay: false,
-        searchValue: '',
-        disableResetSearchBtn: true,
-        disableSearchBtn: true,
-        activeUsers: result.activeUsers,
-        tasks: result.tasks,
-        columns: result.columns,
-        columnOrder: result.columnOrder,
-        leftColItem: result.leftColItem,
-        rightColItem: result.rightColItem,
-        employee: result.employee
-      });
-    } else {
-      this.setState({
-        overlay: false,
-        searchValue: '',
-        disableResetSearchBtn: true,
-        disableSearchBtn: true,
-        activeUsers: result.activeUsers,
-        tasks: result.tasks,
-        columns: result.columns,
-        columnOrder: result.columnOrder
-      });
-    }
-
-    // this.setState({
-    //   disableResetSearchBtn: true,
-    //   overlay: false,
-    //   searchValue: '',
-    //   disableSearchBtn: true
-    // });
+    this.setTheState(result);
   };
 
   searchTasks = e => {
