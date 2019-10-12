@@ -747,11 +747,11 @@ class MoveTasks extends Component {
       <div>
         <LoadingOverlay
           active={this.state.overlay}
-          spinner={<Spinner />}
+          spinner
+          text="Loading..."
           styles={{
             wrapper: {}
           }}
-          classNamePrefix="MyLoader_"
         >
           <EmployeeList>{userContent}</EmployeeList>
           {searchOption}
